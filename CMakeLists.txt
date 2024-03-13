@@ -22,6 +22,8 @@ set(PROJECT_SOURCES
         src/settingwindow.h
         src/settingwindow.cpp
         src/settingwindow.ui
+        src/lyricwidget.h
+        src/lyricwidget.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
