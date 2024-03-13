@@ -11,21 +11,10 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Netease Music Lyric</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <widget class="QLabel" name="labelLyric">
-      <property name="text">
-       <string>TextLabel</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-   </layout>
+   <layout class="QVBoxLayout" name="verticalLayout"/>
   </widget>
  </widget>
  <resources/>

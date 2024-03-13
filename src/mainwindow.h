@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QUdpSocket>
 #include "setting.h"
+#include "lyricwidget.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -23,8 +24,11 @@ private:
     QUdpSocket* server;
     Ui::MainWindow *ui;
     QApplication* application;
+    LyricWidget* lyric;
     QString currentLyric;
     Setting setting;
+    QFont defaultFont;
+    qint64 index;
 private:
     void closeEvent(QCloseEvent* event) override;
 private slots:
