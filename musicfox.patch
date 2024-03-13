@@ -1,0 +1,56 @@
+diff --git a/internal/ui/player.go b/internal/ui/player.go
+index 2fa9f27..8b9ed74 100644
+--- a/internal/ui/player.go
++++ b/internal/ui/player.go
+@@ -8,6 +8,7 @@ import (
+ 	"strconv"
+ 	"strings"
+ 	"time"
++	"net"
+ 
+ 	"github.com/anhoder/foxful-cli/model"
+ 	"github.com/anhoder/foxful-cli/util"
+@@ -674,6 +675,15 @@ func (p *Player) lyricListener(_ int64, content, transContent string, _ bool, in
+ 		p.lyrics[curIndex] += " [" + transContent + "]"
+ 	}
+ 
++	// ----------------------------------    Change start -------------------
++	// send lyric to target port
++	waitSend := content
++	if transContent != "" {
++		waitSend += "\n" + transContent
++	}
++	sendLyricByUdp(16501, waitSend);
++	// ----------------------------------    Change end   -------------------
++
+ 	// after
+ 	for i := 1; i < len(p.lyrics)-curIndex; i++ {
+ 		if f, tf := p.lrcTimer.GetLRCFragment(index + i); f != nil {
+@@ -687,6 +697,27 @@ func (p *Player) lyricListener(_ int64, content, transContent string, _ bool, in
+ 	}
+ }
+ 
++// ---------------------------------------------    Change start -----------------------
++// send message to target port
++func sendLyricByUdp(port int64, lyric string) {
++        udpServer, err := net.ResolveUDPAddr("udp", ":" + strconv.FormatInt(port, 10))
++
++        if err != nil {
++                return
++        }
++
++        conn, err := net.DialUDP("udp", nil, udpServer)
++        if err != nil {
++                return
++        }
++
++        //close the connection
++         defer conn.Close()
++
++        _, err = conn.Write([]byte(lyric))
++}
++// ---------------------------------------------    Change end -----------------------
++
+ // getLyric 获取歌曲歌词
+ func (p *Player) getLyric(songId int64) {
+ 	p.lrcFile, _ = lyric.ReadLRC(strings.NewReader("[00:00.00] 暂无歌词~"))
