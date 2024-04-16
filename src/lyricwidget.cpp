@@ -52,7 +52,7 @@ void LyricWidget::setSpeed(const double speed)
 
 void LyricWidget::setColor(const QString &color)
 {
-    this->color = QColor::fromString(color);
+    this->color = QColor(color);
 }
 
 void LyricWidget::tick()

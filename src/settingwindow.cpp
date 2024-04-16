@@ -116,7 +116,7 @@ void SettingWindow::applySettingToForm()
 
 void SettingWindow::on_pushButtonChooseColor_clicked()
 {
-    QColor color = QColorDialog::getColor(QColor::fromString(setting.get(KEY_FONT_COLOR)), this);
+    QColor color = QColorDialog::getColor(QColor(QString::fromStdString(setting.get(KEY_FONT_COLOR))), this);
     setting.put(KEY_FONT_COLOR, color.name().toStdString());
     applySettingToForm();
     previewLabel();
