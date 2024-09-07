@@ -91,6 +91,13 @@ void MainWindow::handleCommand(QString command)
         s.put(KEY_POS_Y, QString("%1").arg(y()).toStdString());
         s.store();
         this->lyric->setText("Saved!");
+        this->lyric->tick();
+        return;
+    }
+
+    if (command.startsWith("LYRIC_CONFIG_PREVIEW")) {
+        this->lyric->setText(command.remove(0, 21));
+        this->lyric->tick();
         return;
     }
 
@@ -101,12 +108,14 @@ void MainWindow::handleCommand(QString command)
     {
         setWindowFlag(Qt::FramelessWindowHint, commands[1] == "1");
         setVisible(true);
+        return;
     }
 
     if (commands[0] == "LYRIC_CONFIG_STAY_ON_TOP" && commands.size() == 2)
     {
         setWindowFlag(Qt::WindowStaysOnBottomHint, commands[1] == "1");
         setVisible(true);
+        return;
     }
 }
 

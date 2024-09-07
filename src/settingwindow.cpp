@@ -3,6 +3,7 @@
 #include <QColorDialog>
 #include <QMessageBox>
 #include <QUdpSocket>
+#include <QPlainTextEdit>
 #include "debug.h"
 
 #define PORT 16501
@@ -12,6 +13,9 @@ SettingWindow::SettingWindow(QWidget *parent)
     , ui(new Ui::SettingWindow)
 {
     ui->setupUi(this);
+    ui->plainTextEditPreviewText->textChanged();
+    connect(ui->plainTextEditPreviewText, &QPlainTextEdit::textChanged, this, &SettingWindow::previewLabelText);
+
     initialSetting();
     applySettingToForm();
     previewLabel();
@@ -27,26 +31,6 @@ void SettingWindow::previewLabel()
     QFont font = buildFondFromSetting();
     ui->labelPreview->setFont(font);
     ui->labelPreview->setStyleSheet(QString("color: %1").arg(setting.get(KEY_FONT_COLOR, "#000000").c_str()));
-    if (VALUE_CENTER == setting.get(KEY_POS_H))
-    {
-        ui->labelPreview->setAlignment(Qt::AlignmentFlag::AlignHCenter);
-    } else if (VALUE_LEFT == setting.get(KEY_POS_H))
-    {
-        ui->labelPreview->setAlignment(Qt::AlignmentFlag::AlignHorizontal_Mask | Qt::AlignLeft);
-    } else
-    {
-        ui->labelPreview->setAlignment(Qt::AlignmentFlag::AlignHorizontal_Mask | Qt::AlignRight);
-    }
-    if (VALUE_CENTER == setting.get(KEY_POS_V))
-    {
-        ui->labelPreview->setAlignment(Qt::AlignmentFlag::AlignVCenter);
-    } else if (VALUE_LEFT == setting.get(KEY_POS_V))
-    {
-        ui->labelPreview->setAlignment(Qt::AlignmentFlag::AlignVertical_Mask | Qt::AlignTop);
-    } else
-    {
-        ui->labelPreview->setAlignment(Qt::AlignmentFlag::AlignVertical_Mask | Qt::AlignBottom);
-    }
 }
 
 QFont SettingWindow::buildFondFromSetting()
@@ -60,14 +44,7 @@ QFont SettingWindow::buildFondFromSetting()
 
 void SettingWindow::initialSetting()
 {
-    if (setting.get(KEY_POS_H ) == "")
-    {
-        setting.put(KEY_POS_H, VALUE_CENTER);
-    }
-    if (setting.get(KEY_POS_V) == "")
-    {
-        setting.put(KEY_POS_V, VALUE_CENTER);
-    }
+
     if (setting.get(KEY_FONT_COLOR) == "")
     {
         setting.put(KEY_FONT_COLOR, "#000000");
@@ -147,12 +124,21 @@ void SettingWindow::on_lineEditSize_editingFinished()
     previewLabel();
 }
 
+void SettingWindow::previewLabelText()
+{
+    ui->labelPreview->setText(ui->plainTextEditPreviewText->toPlainText());
+}
 
 void SettingWindow::on_pushButtonPreview_clicked()
 {
     previewLabel();
+    QUdpSocket s;
+    s.writeDatagram(
+        QString("LYRIC_CONFIG_PREVIEW ")
+            .append(ui->plainTextEditPreviewText->toPlainText()).toUtf8(),
+        QHostAddress::LocalHost, PORT
+    );
 }
-
 
 void SettingWindow::on_pushButtonApply_clicked()
 {

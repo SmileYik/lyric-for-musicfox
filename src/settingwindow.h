@@ -40,6 +40,8 @@ private slots:
 
     void on_pushButtonSaveSelf_clicked();
 
+    void previewLabelText();
+
 private:
     Ui::SettingWindow *ui;
     QApplication* application;

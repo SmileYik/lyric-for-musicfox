@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>432</width>
-    <height>284</height>
+    <height>312</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,53 +15,6 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_2">
-    <item row="4" column="0" colspan="2">
-     <widget class="QLabel" name="labelPreview">
-      <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;TextLabel&lt;/p&gt;&lt;p&gt;文本标签&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0">
-     <widget class="QPushButton" name="pushButtonPreview">
-      <property name="toolTip">
-       <string>在下方的文本标签内预览字体变化</string>
-      </property>
-      <property name="text">
-       <string>Preview</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1">
-     <widget class="QPushButton" name="pushButtonApply">
-      <property name="toolTip">
-       <string>应用配置至配置文件并且启动歌词窗口</string>
-      </property>
-      <property name="text">
-       <string>Apply And Start</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="0">
-     <widget class="QPushButton" name="pushButtonReload">
-      <property name="toolTip">
-       <string>保存配置文件，发送重载信号至正在运行中的歌词窗口中</string>
-      </property>
-      <property name="text">
-       <string>Save And Reload</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="1">
-     <widget class="QPushButton" name="pushButtonSaveSelf">
-      <property name="toolTip">
-       <string>发送保存位置信息信号至正在运行中的歌词窗口中</string>
-      </property>
-      <property name="text">
-       <string>Save Self Position</string>
-      </property>
-     </widget>
-    </item>
     <item row="0" column="0" colspan="2">
      <widget class="QWidget" name="widget_3" native="true">
       <layout class="QGridLayout" name="gridLayout">
@@ -147,6 +100,61 @@
       </property>
       <property name="text">
        <string>Frame Less</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QPushButton" name="pushButtonPreview">
+      <property name="toolTip">
+       <string>在下方的文本标签内预览字体变化</string>
+      </property>
+      <property name="text">
+       <string>Preview</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QPushButton" name="pushButtonApply">
+      <property name="toolTip">
+       <string>应用配置至配置文件并且启动歌词窗口</string>
+      </property>
+      <property name="text">
+       <string>Apply And Start</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QPushButton" name="pushButtonReload">
+      <property name="toolTip">
+       <string>保存配置文件，发送重载信号至正在运行中的歌词窗口中</string>
+      </property>
+      <property name="text">
+       <string>Save And Reload</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QPushButton" name="pushButtonSaveSelf">
+      <property name="toolTip">
+       <string>发送保存位置信息信号至正在运行中的歌词窗口中</string>
+      </property>
+      <property name="text">
+       <string>Save Self Position</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0" colspan="2">
+     <widget class="QPlainTextEdit" name="plainTextEditPreviewText">
+      <property name="plainText">
+       <string>TextLabel
+文本标签</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="0" colspan="2">
+     <widget class="QLabel" name="labelPreview">
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;TextLabel&lt;/p&gt;&lt;p&gt;文本标签&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
     </item>
