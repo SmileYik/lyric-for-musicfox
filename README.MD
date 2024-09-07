@@ -21,7 +21,7 @@ make
 
 ### 配置歌词
 
-![setting window](./docs/3.png)
+![setting window](./docs/3.png =400x600)
 
 首次运行时将会自动弹出配置窗口，若非首次运行，则需要加上参数`setting`才能打开此设定窗口（例如`./lyric-for-musicfox setting`）。
 
@@ -42,7 +42,5 @@ make
 ![setting window](./docs/4.png)
 
 ### 效果
-
-![1](./docs/1.png)
 
 ![2](./docs/2.png)
