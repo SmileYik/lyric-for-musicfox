@@ -84,28 +84,6 @@ void SettingWindow::initialSetting()
 
 void SettingWindow::applySettingToForm()
 {
-    // apply setting to form.
-    if (VALUE_CENTER == setting.get(KEY_POS_H))
-    {
-        ui->radioButtonHCenter->setChecked(true);
-    } else if (VALUE_LEFT == setting.get(KEY_POS_H))
-    {
-        ui->radioButtonHLeft->setChecked(true);
-    } else
-    {
-        ui->radioButtonHRight->setChecked(true);
-    }
-
-    if (VALUE_CENTER == setting.get(KEY_POS_V))
-    {
-        ui->radioButtonVCenter->setChecked(true);
-    } else if (VALUE_LEFT == setting.get(KEY_POS_V))
-    {
-        ui->radioButtonVLeft->setChecked(true);
-    } else
-    {
-        ui->radioButtonVRight->setChecked(true);
-    }
 
     DEBUG(QString::fromStdString(setting.get(KEY_FONT_COLOR)));
     ui->labelColorPreview->setText(QString::fromStdString(setting.get(KEY_FONT_COLOR)));
@@ -125,65 +103,6 @@ void SettingWindow::on_pushButtonChooseColor_clicked()
     setting.put(KEY_FONT_COLOR, color.name().toStdString());
     applySettingToForm();
     previewLabel();
-}
-
-
-void SettingWindow::on_radioButtonHLeft_clicked(bool checked)
-{
-    if (checked)
-    {
-        setting.put(KEY_POS_H, VALUE_LEFT);
-        previewLabel();
-    }
-}
-
-
-void SettingWindow::on_radioButtonHCenter_clicked(bool checked)
-{
-    if (checked)
-    {
-        setting.put(KEY_POS_H, VALUE_CENTER);
-        previewLabel();
-    }
-}
-
-
-void SettingWindow::on_radioButtonHRight_clicked(bool checked)
-{
-    if (checked)
-    {
-        setting.put(KEY_POS_H, VALUE_RIGHT);
-        previewLabel();
-    }
-}
-
-void SettingWindow::on_radioButtonVLeft_clicked(bool checked)
-{
-    if (checked)
-    {
-        setting.put(KEY_POS_V, VALUE_LEFT);
-        previewLabel();
-    }
-}
-
-
-void SettingWindow::on_radioButtonVCenter_clicked(bool checked)
-{
-    if (checked)
-    {
-        setting.put(KEY_POS_V, VALUE_CENTER);
-        previewLabel();
-    }
-}
-
-
-void SettingWindow::on_radioButtonVRight_clicked(bool checked)
-{
-    if (checked)
-    {
-        setting.put(KEY_POS_V, VALUE_RIGHT);
-        previewLabel();
-    }
 }
 
 void SettingWindow::on_fontComboBox_currentFontChanged(const QFont &f)

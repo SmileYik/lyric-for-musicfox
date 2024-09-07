@@ -21,7 +21,7 @@ make
 
 ### 配置歌词
 
-![setting window](./docs/3.png =400x600)
+![setting window](./docs/3.png)
 
 首次运行时将会自动弹出配置窗口，若非首次运行，则需要加上参数`setting`才能打开此设定窗口（例如`./lyric-for-musicfox setting`）。
 
@@ -38,8 +38,6 @@ make
 设定建议：首先打开一个歌词窗口，与此同时打开设定窗口。在设定窗口中设置好需要的字体、文本颜色和字体大小，并让现有歌词窗口进行重载。
 取消勾选“Frame Less”复选框，以显示歌词窗口边框，此时对歌词窗口进行移位或调整窗口大小。当认为合适时，勾选上“Frame Less”复选框，
 与此同时，按下“Save Self Position”按钮进行保存相关信息。之后直接不保存配置，并关闭设定窗口，到此设置完毕。
-
-![setting window](./docs/4.png)
 
 ### 效果
 
