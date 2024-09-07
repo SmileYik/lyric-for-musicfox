@@ -26,12 +26,18 @@ private:
     QApplication* application;
     LyricWidget* lyric;
     QString currentLyric;
-    Setting setting;
     QFont defaultFont;
     qint64 index;
 private:
     void closeEvent(QCloseEvent* event) override;
+
+signals:
+    void needReloadSetting();
+    void reciveCommand(QString command);
+
 private slots:
     void receiveLyric();
+    void reloadSetting();
+    void handleCommand(QString command);
 };
 #endif // MAINWINDOW_H

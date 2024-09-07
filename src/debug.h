@@ -2,10 +2,11 @@
 #define DEBUG_H
 
 #ifdef DEBUG_FLAG
-#  define DEBUG qDebug()
+#  include <QDebug>
+#  define DEBUG(CODE) qDebug() << CODE
 #else
-#  include <QStringList>
-#  define DEBUG QStringList()
+#  include <QDebug>
+#  define DEBUG(CODE)
 #endif
 
 

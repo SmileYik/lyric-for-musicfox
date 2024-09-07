@@ -38,11 +38,19 @@ private slots:
 
     void on_checkBoxItalic_clicked(bool checked);
 
+    void on_checkBoxStayOnTop_clicked(bool checked);
+
+    void on_checkBoxFrameLess_clicked(bool checked);
+
     void on_lineEditSize_editingFinished();
 
     void on_pushButtonPreview_clicked();
 
     void on_pushButtonApply_clicked();
+
+    void on_pushButtonReload_clicked();
+
+    void on_pushButtonSaveSelf_clicked();
 
 private:
     Ui::SettingWindow *ui;
@@ -52,6 +60,9 @@ private:
     QFont buildFondFromSetting();
     void initialSetting();
     void applySettingToForm();
+
+private:
+    void closeEvent(QCloseEvent* event) override;
 };
 
 #endif // SETTINGWINDOW_H

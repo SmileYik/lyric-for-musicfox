@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     {
         SettingWindow w;
         w.show();
-        a.exec();
+        if (a.exec() == 1) return 0;
     }
     MainWindow w(&a);
     w.show();

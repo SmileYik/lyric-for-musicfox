@@ -24,6 +24,12 @@ Setting::Setting()
 
 }
 
+const bool Setting::has(const std::string& key) const
+{
+    return keyValues.count(key);
+}
+
+
 const std::string Setting::get(const std::string& key)
 {
     return keyValues.count(key) ? keyValues[key] : "";

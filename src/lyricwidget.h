@@ -25,8 +25,14 @@ private:
     QFont font;
     QColor color;
     double offset = 0;
-    bool front = true;
+    /**
+     * 是否需要滚动
+     */
     bool needScroll;
+    /**
+     * 滚动方向
+     */
+    bool front = true;
     int maxWidth;
 };
 

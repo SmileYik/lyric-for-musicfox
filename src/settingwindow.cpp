@@ -2,7 +2,10 @@
 #include "ui_settingwindow.h"
 #include <QColorDialog>
 #include <QMessageBox>
+#include <QUdpSocket>
 #include "debug.h"
+
+#define PORT 16501
 
 SettingWindow::SettingWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -104,7 +107,7 @@ void SettingWindow::applySettingToForm()
         ui->radioButtonVRight->setChecked(true);
     }
 
-    DEBUG << QString::fromStdString(setting.get(KEY_FONT_COLOR));
+    DEBUG(QString::fromStdString(setting.get(KEY_FONT_COLOR)));
     ui->labelColorPreview->setText(QString::fromStdString(setting.get(KEY_FONT_COLOR)));
     ui->labelColorPreview->setStyleSheet(QString("background-color: %1").arg(setting.get(KEY_FONT_COLOR).c_str()));
 
@@ -112,6 +115,8 @@ void SettingWindow::applySettingToForm()
     ui->lineEditSize->setText(QString::fromStdString(setting.get(KEY_FONT_SIZE)));
     ui->checkBoxBold->setChecked(setting.getBool(KEY_FONT_BOLD));
     ui->checkBoxItalic->setChecked(setting.getBool(KEY_FONT_ITALIC));
+    ui->checkBoxFrameLess->setChecked(setting.getBool(KEY_FRAME_LESS));
+    ui->checkBoxStayOnTop->setChecked(setting.getBool(KEY_FLAGS_STAY_ON_TOP));
 }
 
 void SettingWindow::on_pushButtonChooseColor_clicked()
@@ -202,6 +207,20 @@ void SettingWindow::on_checkBoxItalic_clicked(bool checked)
     previewLabel();
 }
 
+void SettingWindow::on_checkBoxFrameLess_clicked(bool checked)
+{
+    // setting.putBool(KEY_FRAME_LESS, checked);
+    QUdpSocket s;
+    s.writeDatagram(QString("LYRIC_CONFIG_FRAME_LESS %1").arg(checked ? 1 : 0).toUtf8(), QHostAddress::LocalHost, PORT);
+}
+
+void SettingWindow::on_checkBoxStayOnTop_clicked(bool checked)
+{
+    // setting.putBool(KEY_FLAGS_STAY_ON_TOP, checked);
+    QUdpSocket s;
+    s.writeDatagram(QString("LYRIC_CONFIG_STAY_ON_TOP %1").arg(checked ? 1 : 0).toUtf8(), QHostAddress::LocalHost, PORT);
+}
+
 
 void SettingWindow::on_lineEditSize_editingFinished()
 {
@@ -218,8 +237,32 @@ void SettingWindow::on_pushButtonPreview_clicked()
 
 void SettingWindow::on_pushButtonApply_clicked()
 {
+    setting.putBool(KEY_FRAME_LESS, ui->checkBoxFrameLess->isChecked());
+    setting.putBool(KEY_FLAGS_STAY_ON_TOP, ui->checkBoxStayOnTop->isChecked());
     setting.store();
     QMessageBox::information(this, "Information", "If you want configurate in one day, "
                                                   "you can use command 'netease-lyric setting'");
     this->close();
 }
+
+void SettingWindow::on_pushButtonReload_clicked()
+{
+    setting.putBool(KEY_FRAME_LESS, ui->checkBoxFrameLess->isChecked());
+    setting.putBool(KEY_FLAGS_STAY_ON_TOP, ui->checkBoxStayOnTop->isChecked());
+    setting.store();
+    QUdpSocket s;
+    s.writeDatagram(QString("LYRIC_CONFIG_RELOAD").toUtf8(), QHostAddress::LocalHost, PORT);
+}
+
+void SettingWindow::on_pushButtonSaveSelf_clicked()
+{
+    QUdpSocket s;
+    s.writeDatagram(QString("LYRIC_CONFIG_SAVE_SELF").toUtf8(), QHostAddress::LocalHost, PORT);
+}
+
+
+void SettingWindow::closeEvent(QCloseEvent* event)
+{
+    application->exit(1);
+}
+
