@@ -58,13 +58,20 @@ jobs:
       run: |
         sudo apt-get install libflac-dev libasound2-dev
     
-    - name: Install Qt
+    - name: Install Qt for Linux
       # You may pin to the exact commit or the version.
       # uses: jurplel/install-qt-action@f03f05556819ceb3781ee2f455ec44c339d683c0
       uses: jurplel/install-qt-action@v4.0.0
+      if: runner.os == 'Linux'
       with:
         # Version of Qt to install
         version: 5.15.2
+        
+    - name: Install Qt Static for Windows
+      uses: orestonce/install-qt-static@v0.4.3
+      if: runner.os == 'Windows'
+      with:
+        version: Qt5.15.7-Windows-x86_64-MinGW8.1.0-staticFull-20221104
         
     - name: Set reusable strings
       # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
