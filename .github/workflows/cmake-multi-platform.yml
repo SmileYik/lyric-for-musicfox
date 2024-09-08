@@ -81,7 +81,7 @@ jobs:
       run: |
         git clone https://code.qt.io/qt/qt5.git qt
         cd qt
-        git switch 5.15.2
+        git switch 6.5.3
         .\init-repository
         mkdir build
         cd build
