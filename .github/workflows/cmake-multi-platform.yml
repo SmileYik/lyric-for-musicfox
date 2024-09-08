@@ -74,6 +74,10 @@ jobs:
       with:
         version: Qt6.5.3-Windows-x86_64-MinGW13.2.0-ucrt-staticFull-20240527
 
+    - name: Prepare VS Shell
+      if: ${{ (runner.os == 'Windows') && (matrix.c_compiler == 'cl') }}
+      uses: egor-tensin/vs-shell@v2
+
     - name: Install Qt Static for Windows CL
       if: ${{ (runner.os == 'Windows') && (matrix.c_compiler == 'cl') }}
       shell: pwsh
