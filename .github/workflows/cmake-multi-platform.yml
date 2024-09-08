@@ -69,11 +69,9 @@ jobs:
         
     - name: Install Qt Static for Windows
       if: runner.os == 'Windows'
-      uses: anthepro/install-qt-static@v1
+      uses: orestonce/install-qt-static@v0.4.3
       with:
-        version: 5.15.2
-        configure-args: -opensource -opengl desktop
-        submodules: qtbase,qtshadertools,qtdeclarative,qtnetwork
+        version: Qt6.5.3-Windows-x86_64-MinGW13.2.0-ucrt-staticFull-20240527
         
     - name: Set reusable strings
       # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
