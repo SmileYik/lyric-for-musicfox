@@ -9,6 +9,7 @@
 
 前置需求：[go-musicfox](https://github.com/go-musicfox/go-musicfox)项目所需需求以外还需要QT5或者QT6。
 
+
 ```
 clone https://github.com/SmileYik/lyric-for-musicfox.git
 cd netease-lyric
@@ -18,6 +19,9 @@ make
 ```
 
 构建过程中会拉取[go-musicfox](https://github.com/go-musicfox/go-musicfox)并应用补丁后进行编译出修改版本。位置在`go-musicfox/bin`下
+
+可选修改歌词通信端口：打开 `CMakeLists.txt` 修改 `CONFIG_PORT` 为自己想要的通信端口后进行编译即可。
+若编译过程中出现打补丁失败字样可以自行文本修改`musicfox.patch`中`${CONFIG_PORT}`至想要的端口后手动打补丁编译。
 
 ### 配置歌词
 

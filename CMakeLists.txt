@@ -10,6 +10,12 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(QT_VERSION_MAJOR 5)
 
+# 修改歌词通信时使用的UDP端口
+set(CONFIG_PORT 16501)
+
+# add_definitions(-DDEBUG_FLAG)
+add_definitions(-DCONFIG_PORT=${CONFIG_PORT})
+
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Network)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Network)
 
@@ -77,6 +83,15 @@ if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(lyric-for-musicfox)
 endif()
 
+# 生成带有自定端口的补丁
+set(PATCH_CONTENT)
+file(STRINGS musicfox.patch PATCH_CONTENT NEWLINE_CONSUME ENCODING UTF-8)
+string(REPLACE ";" "\${split}" PATCH_CONTENT ${PATCH_CONTENT})
+string(REPLACE "\${CONFIG_PORT}" "${CONFIG_PORT}" PATCH_CONTENT ${PATCH_CONTENT})
+string(REPLACE "\${split}" "\;" PATCH_CONTENT ${PATCH_CONTENT})
+file(WRITE musicfox-target-port.patch ${PATCH_CONTENT})
+# 生成带有自定端口的补丁 结束
+
 add_custom_target(clone-musicfox
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     COMMAND ${CMAKE_COMMAND} "-E" "remove_directory" "go-musicfox"
@@ -87,7 +102,7 @@ add_custom_target(clone-musicfox
 
 add_custom_target(patch-musicfox
     WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/go-musicfox"
-    COMMAND git apply "${CMAKE_CURRENT_SOURCE_DIR}/musicfox.patch"
+    COMMAND git apply "${CMAKE_CURRENT_SOURCE_DIR}/musicfox-target-port.patch"
     COMMENT "Patching..."
     USES_TERMINAL
 )

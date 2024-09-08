@@ -1,7 +1,8 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
-#include "debug.h"
 #include <QFontMetrics>
+#include "debug.h"
+#include "config.h"
 
 MainWindow::MainWindow(QApplication* app, QWidget *parent)
     : QMainWindow(parent)
@@ -20,7 +21,7 @@ MainWindow::MainWindow(QApplication* app, QWidget *parent)
 
     // setup server
     server = new QUdpSocket(this);
-    if (!server->bind(QHostAddress::LocalHost, 16501))
+    if (!server->bind(QHostAddress::LocalHost, PORT))
     {
         qInfo() << "已经有个实例正在运行了！";
         server->close();
@@ -28,6 +29,7 @@ MainWindow::MainWindow(QApplication* app, QWidget *parent)
         server = nullptr;
         return;
     }
+    DEBUG("Running at port" << PORT);
     connect(server, SIGNAL(readyRead()), this, SLOT(receiveLyric()));
 
     emit needReloadSetting();

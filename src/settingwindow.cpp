@@ -5,8 +5,7 @@
 #include <QUdpSocket>
 #include <QPlainTextEdit>
 #include "debug.h"
-
-#define PORT 16501
+#include "config.h"
 
 SettingWindow::SettingWindow(QWidget *parent)
     : QMainWindow(parent)

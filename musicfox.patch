@@ -20,7 +20,7 @@ index 2fa9f27..8b9ed74 100644
 +	if transContent != "" {
 +		waitSend += "\n" + transContent
 +	}
-+	sendLyricByUdp(16501, waitSend);
++	sendLyricByUdp(${CONFIG_PORT}, waitSend);
 +	// ----------------------------------    Change end   -------------------
 +
  	// after
