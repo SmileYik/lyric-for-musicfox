@@ -50,9 +50,9 @@ jobs:
     - name: install depends of go-musicfox
       shell: bash
       run: |
-        apt install software-properties-common build-essential
+        apt-get install software-properties-common build-essential
         add-apt-repository ppa:longsleep/golang-backports
-        apt install libflac-dev libasound2-dev golang-go
+        apt-get install libflac-dev libasound2-dev golang-go
     
     - name: Install Qt
       # You may pin to the exact commit or the version.
