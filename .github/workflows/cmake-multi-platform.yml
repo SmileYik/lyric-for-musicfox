@@ -98,7 +98,7 @@ jobs:
       if: runner.os == 'Linux'
       with:
         # Artifact name
-        name: lyric-for-musicfox-linux-${{ runner.c_compiler }}
+        name: lyric-for-musicfox-linux-${{ matrix.c_compiler }}
         # A file, directory or wildcard pattern that describes what to upload
         path: "${{ github.workspace }}/build/lyric-for-musicfox"
         
@@ -122,7 +122,7 @@ jobs:
       if: runner.os == 'Linux'
       with:
         # Artifact name
-        name: patched-go-musicfox-linux-${{ runner.c_compiler }}
+        name: patched-go-musicfox-linux-${{ matrix.c_compiler }}
         # A file, directory or wildcard pattern that describes what to upload
         path: "${{ github.workspace }}/build/go-musicfox/bin/musicfox" 
         
