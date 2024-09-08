@@ -19,6 +19,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QApplication* app, QWidget *parent = nullptr);
     ~MainWindow();
+    bool isRunning();
 
 private:
     QUdpSocket* server;

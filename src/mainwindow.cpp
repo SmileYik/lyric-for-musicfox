@@ -10,6 +10,7 @@ MainWindow::MainWindow(QApplication* app, QWidget *parent)
     , lyric(new LyricWidget(this))
 {
     ui->setupUi(this);
+    ui->verticalLayout->addWidget(lyric);
     setAttribute(Qt::WA_TranslucentBackground);
     setAttribute(Qt::WA_TransparentForMouseEvents);
     setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Tool | Qt::WindowTransparentForInput);
@@ -19,9 +20,15 @@ MainWindow::MainWindow(QApplication* app, QWidget *parent)
 
     // setup server
     server = new QUdpSocket(this);
+    if (!server->bind(QHostAddress::LocalHost, 16501))
+    {
+        qInfo() << "已经有个实例正在运行了！";
+        server->close();
+        delete server;
+        server = nullptr;
+        return;
+    }
     connect(server, SIGNAL(readyRead()), this, SLOT(receiveLyric()));
-    server->bind(QHostAddress::LocalHost, 16501);
-    ui->verticalLayout->addWidget(lyric);
 
     emit needReloadSetting();
 }
@@ -29,9 +36,18 @@ MainWindow::MainWindow(QApplication* app, QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
-    server->close();
-    delete server;
+
+    if (server) {
+        server->close();
+        delete server;
+    }
+
     delete lyric;
+}
+
+bool MainWindow::isRunning()
+{
+    return server != nullptr;
 }
 
 void MainWindow::reloadSetting()

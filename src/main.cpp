@@ -17,6 +17,7 @@ int main(int argc, char *argv[])
         if (a.exec() == 1) return 0;
     }
     MainWindow w(&a);
+    if (!w.isRunning()) return 0;
     w.show();
     return a.exec();
 }
