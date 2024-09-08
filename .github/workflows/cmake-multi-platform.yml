@@ -91,9 +91,17 @@ jobs:
         -S ${{ github.workspace }}
 
     - name: Build
+      if: runner.os == 'Linux'
       # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
       run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }}
-
+      
+    - name: Build
+      if: runner.os == 'Windows'
+      # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
+      run: |
+        cd ${{ steps.strings.outputs.build-output-dir }}
+        mingw32-make ${{ matrix.build_type }}
+      
     - name: Test
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
       # Execute tests defined by the CMake configuration. Note that --build-config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
