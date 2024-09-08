@@ -51,6 +51,11 @@ jobs:
       uses: actions/setup-go@v5.0.2
       with:
         go-version: "^1.22.0"
+
+    - name: Install depends of go-musicfox
+      shell: bash
+      run: |
+        sudo apt-get install libflac-dev libasound2-dev
     
     - name: Install Qt
       # You may pin to the exact commit or the version.
