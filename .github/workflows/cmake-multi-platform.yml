@@ -69,13 +69,13 @@ jobs:
         version: 5.15.2
         
     - name: Install Qt Static for Windows MinGW
-      if: ${{ runner.os == 'Windows' && matrix.c_compiler == 'gcc' }}
+      if: ${{ (runner.os == 'Windows') && (matrix.c_compiler == 'gcc') }}
       uses: orestonce/install-qt-static@v0.4.3
       with:
         version: Qt6.5.3-Windows-x86_64-MinGW13.2.0-ucrt-staticFull-20240527
 
     - name: Install Qt Static for Windows CI
-      if: ${{ runner.os == 'Windows' && matrix.c_compiler == 'ci' }}
+      if: ${{ (runner.os == 'Windows') && (matrix.c_compiler == 'ci') }}
       shell: pwsh
       # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
       run: |
@@ -99,7 +99,7 @@ jobs:
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-      if: ${{ runner.os == 'Linux' || matrix.c_compiler == 'ci' }}
+      if: ${{ (runner.os == 'Linux') || (matrix.c_compiler == 'ci') }}
       run: >
         cmake -B ${{ steps.strings.outputs.build-output-dir }}
         -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
@@ -110,7 +110,7 @@ jobs:
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-      if: ${{ runner.os == 'Linux' && matrix.c_compiler == 'gcc' }}
+      if: ${{ (runner.os == 'Windows') && (matrix.c_compiler == 'gcc') }}
       run: >
         cmake -B ${{ steps.strings.outputs.build-output-dir }}
         -G "MinGW Makefiles"
@@ -120,12 +120,12 @@ jobs:
         -S ${{ github.workspace }}
 
     - name: Build
-      if: ${{ runner.os == 'Linux' || matrix.c_compiler == 'ci' }}
+      if: ${{ (runner.os == 'Linux') || (matrix.c_compiler == 'ci') }}
       # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
       run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }}
       
     - name: Build
-      if: ${{ runner.os == 'Linux' && matrix.c_compiler == 'gcc' }}
+      if: ${{ (runner.os == 'Windows') && (matrix.c_compiler == 'gcc') }}
       shell: pwsh
       # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
       run: |
