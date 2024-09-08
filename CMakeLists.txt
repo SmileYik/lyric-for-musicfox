@@ -62,7 +62,7 @@ if(MSVC)
     add_compile_options("/permissive-")
     add_compile_options("/Zc:__cplusplus")
     set_target_properties(lyric-for-musicfox PROPERTIES CXX_STANDARD 17)
-    target_compile_options(lyric-for-musicfox PUBLIC "/Zc:__cplusplus")
+    target_compile_options(lyric-for-musicfox PUBLIC "/Zc:__cplusplus" PUBLIC "/permissive-")
 endif()
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
