@@ -90,7 +90,7 @@ jobs:
         mkdir build
         cd build
         ../configure.bat -prefix ${{ runner.temp }}/Qt-static -release -static -static-runtime -opensource -nomake examples -nomake tests -submodules qtbase -- -DQT_BUILD_TESTS=OFF
-        cmake --build . -- -j 0
+        cmake --build .
         cmake --install .
         Add-Content $env:GITHUB_PATH "${{ runner.temp }}\Qt-static\bin"
         
