@@ -100,7 +100,7 @@ jobs:
       # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
       run: |
         cd ${{ steps.strings.outputs.build-output-dir }}
-        mingw32-make ${{ matrix.build_type }}
+        mingw32-make
       
     - name: Test
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
@@ -124,7 +124,7 @@ jobs:
         # Artifact name
         name: lyric-for-musicfox-win
         # A file, directory or wildcard pattern that describes what to upload
-        path: "${{ github.workspace }}/build/Release/lyric-for-musicfox.exe"
+        path: "${{ github.workspace }}/build/lyric-for-musicfox.exe"
 
     - name: Download a Build Artifact
       uses: actions/download-artifact@v4.1.8
