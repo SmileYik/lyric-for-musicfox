@@ -85,7 +85,7 @@ jobs:
         perl init-repository --module-subset=qtbase
         mkdir build
         cd build
-        ../configure.bat -prefix ${{ runner.temp }}/Qt-static -release -static -static-runtime -opensource -nomake examples -nomake tests -submodules qtbase  -- -DQT_BUILD_TESTS=OFF -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }} -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
+        ../configure.bat -prefix ${{ runner.temp }}/Qt-static -release -static -static-runtime -opensource -nomake examples -nomake tests -submodules qtbase  -- -DQT_BUILD_TESTS=OFF -G "Visual Studio 17 2022"
         cmake --build . -- -j
         cmake --install .
         Add-Content $env:GITHUB_PATH "${{ runner.temp }}\Qt-static\bin"
