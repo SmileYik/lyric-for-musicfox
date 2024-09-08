@@ -99,8 +99,7 @@ jobs:
       if: runner.os == 'Windows'
       # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
       run: |
-        cd ${{ steps.strings.outputs.build-output-dir }}
-        mingw32-make
+        cd build && mingw32-make
       
     - name: Test
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
