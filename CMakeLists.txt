@@ -8,7 +8,6 @@ set(CMAKE_AUTORCC ON)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(QT_VERSION_MAJOR 5)
 
 # 修改歌词通信时使用的UDP端口
 set(CONFIG_PORT 16501)
@@ -54,6 +53,12 @@ else()
             ${PROJECT_SOURCES}
         )
     endif()
+endif()
+
+if(MSVC)
+    message("msvc")
+    add_compile_options("/permissive-")
+    add_compile_options("/Zc:__cplusplus")
 endif()
 
 target_link_libraries(lyric-for-musicfox PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network)
