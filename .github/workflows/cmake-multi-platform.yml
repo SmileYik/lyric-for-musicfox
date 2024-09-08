@@ -30,6 +30,9 @@ jobs:
           - os: windows-latest
             c_compiler: gcc
             cpp_compiler: g++
+          - os: windows-latest
+            c_compiler: cl
+            cpp_compiler: cl
           - os: ubuntu-latest
             c_compiler: gcc
             cpp_compiler: g++
@@ -65,11 +68,26 @@ jobs:
         # Version of Qt to install
         version: 5.15.2
         
-    - name: Install Qt Static for Windows
-      if: runner.os == 'Windows'
+    - name: Install Qt Static for Windows MinGW
+      if: ${{ runner.os == 'Windows' && matrix.c_compiler == 'gcc' }}
       uses: orestonce/install-qt-static@v0.4.3
       with:
         version: Qt6.5.3-Windows-x86_64-MinGW13.2.0-ucrt-staticFull-20240527
+
+    - name: Install Qt Static for Windows CI
+      if: ${{ runner.os == 'Windows' && matrix.c_compiler == 'ci' }}
+      shell: pwsh
+      # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
+      run: |
+        git clone https://code.qt.io/qt/qt5.git qt
+        cd qt
+        git switch 5.15.2
+        ./init-repository.bat
+        mkdir build
+        cd build
+        ../configure.bat -prefix ${{ runner.temp }}/Qt-static -release -static -static-runtime -opensource  -- -DQT_BUILD_TESTS=OFF
+        cmake --build .
+        cmake --install .
         
     - name: Set reusable strings
       # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
@@ -81,7 +99,7 @@ jobs:
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-      if: runner.os == 'Linux'
+      if: ${{ runner.os == 'Linux' || matrix.c_compiler == 'ci' }}
       run: >
         cmake -B ${{ steps.strings.outputs.build-output-dir }}
         -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
@@ -92,7 +110,7 @@ jobs:
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-      if: runner.os == 'Windows'
+      if: ${{ runner.os == 'Linux' && matrix.c_compiler == 'gcc' }}
       run: >
         cmake -B ${{ steps.strings.outputs.build-output-dir }}
         -G "MinGW Makefiles"
@@ -102,12 +120,12 @@ jobs:
         -S ${{ github.workspace }}
 
     - name: Build
-      if: runner.os == 'Linux'
+      if: ${{ runner.os == 'Linux' || matrix.c_compiler == 'ci' }}
       # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
       run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }}
       
     - name: Build
-      if: runner.os == 'Windows'
+      if: ${{ runner.os == 'Linux' && matrix.c_compiler == 'gcc' }}
       shell: pwsh
       # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
       run: |
@@ -129,7 +147,7 @@ jobs:
         # Artifact name
         name: lyric-for-musicfox-win
         # A file, directory or wildcard pattern that describes what to upload
-        path: "${{ github.workspace }}/build/lyric-for-musicfox.exe"
+        path: "${{ github.workspace }}/build/*/lyric-for-musicfox.exe"
 
     - name: Download a Build Artifact
       uses: actions/download-artifact@v4.1.8
