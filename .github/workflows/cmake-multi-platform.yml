@@ -85,7 +85,7 @@ jobs:
         perl init-repository
         mkdir build
         cd build
-        ../configure.bat -prefix ${{ runner.temp }}/Qt-static -release -static -static-runtime -opensource  -- -DQT_BUILD_TESTS=OFF
+        ../configure.bat -prefix ${{ runner.temp }}/Qt-static -release -static -static-runtime -opensource -nomake test -nomake examples -submodules qtbase  -- -DQT_BUILD_TESTS=OFF
         cmake --build .
         cmake --install .
         
