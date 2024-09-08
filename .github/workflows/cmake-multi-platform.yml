@@ -53,6 +53,7 @@ jobs:
         go-version: "^1.22.0"
 
     - name: Install depends of go-musicfox
+      if: runner.os == 'Linux'
       shell: bash
       run: |
         sudo apt-get install libflac-dev libasound2-dev
