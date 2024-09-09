@@ -147,6 +147,7 @@ void SettingWindow::on_pushButtonApply_clicked()
     QMessageBox::information(this, "Information", "If you want configurate in one day, "
                                                   "you can use command 'netease-lyric setting'");
     this->close();
+    application->exit(0);
 }
 
 void SettingWindow::on_pushButtonReload_clicked()
