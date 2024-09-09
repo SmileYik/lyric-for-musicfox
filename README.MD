@@ -12,10 +12,16 @@
 
 ```
 clone https://github.com/SmileYik/lyric-for-musicfox.git
-cd netease-lyric
+cd lyric-for-musicfox
 cmake -S . -B build
 cd build
 make
+```
+
+CMake 配置时可选编译打补丁的musicfox。
+```
+cmake -S . -B build -DSKIP_BUILD_MUSICFOX=YES # 跳过构建 musicfox
+cmake -S . -B build -DSKIP_BUILD_MUSICFOX=NO  # 构建 musicfox
 ```
 
 构建过程中会拉取[go-musicfox](https://github.com/go-musicfox/go-musicfox)并应用补丁后进行编译出修改版本。位置在`go-musicfox/bin`下

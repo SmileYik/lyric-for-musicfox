@@ -11,6 +11,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # 修改歌词通信时使用的UDP端口
 set(CONFIG_PORT 16501)
+# 跳过编译 musicfox
+if(NOT DEFINED SKIP_BUILD_MUSICFOX)
+    set(SKIP_BUILD_MUSICFOX NO)
+endif()
 
 # add_definitions(-DDEBUG_FLAG)
 add_definitions(-DCONFIG_PORT=${CONFIG_PORT})
@@ -124,4 +128,9 @@ add_custom_target(musicfox
 
 add_dependencies(patch-musicfox clone-musicfox)
 add_dependencies(musicfox patch-musicfox)
-add_dependencies(lyric-for-musicfox musicfox)
+
+if(SKIP_BUILD_MUSICFOX)
+    message("-- * Skip build patched musicfox.")
+else()
+    add_dependencies(lyric-for-musicfox musicfox)
+endif()
