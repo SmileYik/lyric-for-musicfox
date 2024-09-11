@@ -43,14 +43,7 @@ set(TARGET_LINK_LIBRARY_LIST
     Qt${QT_VERSION_MAJOR}::Network
 )
 
-if(MSVC)
-    message("-- * msvc setting")
-    add_compile_options("/permissive-")
-    add_compile_options("/Zc:__cplusplus")
-    add_compile_options("/MT")
-    set_target_properties(lyric-for-musicfox PROPERTIES CXX_STANDARD 17)
-    target_compile_options(lyric-for-musicfox PUBLIC "/Zc:__cplusplus" PUBLIC "/permissive-" PUBLIC "/MT")
-elseif(UNIX)
+if(UNIX)
     message("-- * enable mpris")
     list(APPEND PROJECT_SOURCES
         src/dbus-mode/musicfoxmanager.h
@@ -72,6 +65,7 @@ elseif(UNIX)
     list(APPEND PROJECT_INCLUDE_DIRECTORIES
         /usr/lib/dbus-1.0/include/
         /usr/include/dbus-1.0/
+        /usr/lib/x86_64-linux-gnu/dbus-1.0/include
     )
     add_definitions(-DLINUX)
 endif()
@@ -170,4 +164,13 @@ endif()
 if(DEBUG_FLAG)
     message("-- * Enable debug log")
     add_definitions(-DDEBUG_FLAG)
+endif()
+
+if(MSVC)
+    message("-- * msvc setting")
+    add_compile_options("/permissive-")
+    add_compile_options("/Zc:__cplusplus")
+    add_compile_options("/MT")
+    set_target_properties(lyric-for-musicfox PROPERTIES CXX_STANDARD 17)
+    target_compile_options(lyric-for-musicfox PUBLIC "/Zc:__cplusplus" PUBLIC "/permissive-" PUBLIC "/MT")
 endif()

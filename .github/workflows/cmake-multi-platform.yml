@@ -58,6 +58,7 @@ jobs:
       shell: bash
       run: |
         sudo apt-get install libflac-dev libasound2-dev
+        sudo find /  -name "dbus"
     
     - name: Install Qt for Linux
       # You may pin to the exact commit or the version.
