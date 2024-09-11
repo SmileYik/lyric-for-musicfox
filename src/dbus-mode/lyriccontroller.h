@@ -22,6 +22,7 @@ signals:
 
 private slots:
     void tick();
+    void foundPlayer();
     void changeMetadata(MprisMetadata metadata);
     void playbackStatusChange(PlaybackStatusListener::PlaybackStatus status);
 
@@ -29,6 +30,7 @@ private:
     QTimer* timer = nullptr;
     MetadataListener* metadataListener = nullptr;
     PlaybackStatusListener* playbackStatusListener = nullptr;
+    FoundPlayerListener* foundPlayerListener = nullptr;
 
     MusicfoxManager musicfoxManager;
     MprisMetadata metadata;

@@ -23,7 +23,6 @@ public:
     ~MainWindow();
     bool isRunning();
 
-
 private:
     QUdpSocket* server;
     Ui::MainWindow *ui;

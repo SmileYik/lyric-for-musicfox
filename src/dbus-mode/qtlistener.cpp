@@ -80,4 +80,25 @@ const char * PlaybackStatusListener::property()
     return "PlaybackStatus";
 }
 
+FoundPlayerListener::FoundPlayerListener() : QObject(), MusicfoxManager::Listener()
+{
+
+}
+
+FoundPlayerListener::~FoundPlayerListener()
+{
+
+}
+
+void FoundPlayerListener::apply(DBusMessageIter* iter)
+{
+    emit foundPlayer();
+}
+
+const char * FoundPlayerListener::property()
+{
+    return "FoundPlayer";
+}
+
+
 

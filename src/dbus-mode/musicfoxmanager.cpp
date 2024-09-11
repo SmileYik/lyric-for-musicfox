@@ -250,6 +250,15 @@ bool MusicfoxManager::find_musicfox()
 
     dbus_message_unref(dbus_msg);
     dbus_message_unref(dbus_rpl);
+
+    // call event
+    for (auto begin = listeners.begin(), end = listeners.end(); begin != end; ++begin)
+    {
+        if (0 == strcmp((*begin)->property(), LISTENER_TYPE_FOUND_PLAYER))
+        {
+            (*begin)->apply(nullptr);
+        }
+    }
     return true;
 }
 
@@ -262,6 +271,7 @@ void MusicfoxManager::listen(int timeout)
 {
     if (!this->ready_lisen)
     {
+        // init match
         DBusError dbus_error;
         dbus_error_init(&dbus_error);
         dbus_bus_add_match(dbus_conn, "member=PropertiesChanged", &dbus_error);
@@ -275,6 +285,12 @@ void MusicfoxManager::listen(int timeout)
         }
         this->ready_lisen = true;
         DCODE(std::cout << "Finished prepare lisen." << std::endl);
+
+        // find player
+        if (!this->found_musicfox)
+        {
+            find_musicfox();
+        }
     }
 
     if (!dbus_connection_read_write(dbus_conn, timeout))
@@ -350,7 +366,6 @@ void MusicfoxManager::listen(int timeout)
                         std::cout << "apply listener: " << key << std::endl;
                     );
                     (*begin)->apply(&val);
-                    break;
                 }
             }
         }

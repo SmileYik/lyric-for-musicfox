@@ -7,6 +7,8 @@
 #include <vector>
 #include "mprismetadata.h"
 
+#define LISTENER_TYPE_FOUND_PLAYER "FoundPlayer"
+
 /**
  * @todo write docs
  */

@@ -5,6 +5,19 @@
 #include "musicfoxmanager.h"
 #include "mprismetadata.h"
 
+class FoundPlayerListener : public QObject, public MusicfoxManager::Listener
+{
+    Q_OBJECT;
+public:
+    FoundPlayerListener();
+    ~FoundPlayerListener() override;
+
+    const char* property() override;
+    void apply(DBusMessageIter* iter) override;
+signals:
+    void foundPlayer();
+};
+
 class MetadataListener : public QObject, public MusicfoxManager::Listener
 {
     Q_OBJECT;

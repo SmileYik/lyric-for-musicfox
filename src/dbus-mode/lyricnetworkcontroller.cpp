@@ -14,7 +14,8 @@ LyricNetworkController::LyricNetworkController(int interval, int positionUpdateI
 
 LyricNetworkController::~LyricNetworkController()
 {
-    this->controller->deleteLater();
+    disconnect(this->controller);
+    delete this->controller;
 }
 
 void LyricNetworkController::lyricChanged(const Lyric::LyricInfo lyricInfo)
