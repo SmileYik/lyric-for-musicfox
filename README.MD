@@ -1,14 +1,17 @@
 ## Lyric For Musicfox
 
 本程序基于细微修改后的[go-musicfox](https://github.com/go-musicfox/go-musicfox)项目上，
-使得能够在Linux KDE Plasma6桌面上显示歌词。
+使得能够在Linux KDE Plasma6桌面上显示歌词。若您的设备运行着 Linux，则可以在设置界面中勾选上
+Mpris 模式并保存，而免于运行打补丁的 musicfox。
 
 如果鼠标事件无法正常穿透则使用 `-platform xcb` 参数尝试启动，即 `./lyric-for-musicfox -platform xcb`。
 
 ### 构建
 
-前置需求：[go-musicfox](https://github.com/go-musicfox/go-musicfox)项目所需需求以外还需要QT5或者QT6。
+前置需求：[go-musicfox](https://github.com/go-musicfox/go-musicfox)项目所需需求以外还需要：
 
+* QT5 或 QT6
+* libdbus-1 (仅Linux下构建才需要)
 
 ```
 clone https://github.com/SmileYik/lyric-for-musicfox.git
@@ -29,7 +32,26 @@ cmake -S . -B build -DSKIP_BUILD_MUSICFOX=NO  # 构建 musicfox
 可选修改歌词通信端口：打开 `CMakeLists.txt` 修改 `CONFIG_PORT` 为自己想要的通信端口后进行编译即可。
 若编译过程中出现打补丁失败字样可以自行文本修改`musicfox.patch`中`${CONFIG_PORT}`至想要的端口后手动打补丁编译。
 
-### 配置歌词
+### 运行模式
+
+现有两种运行模式，一种需要运行修改后的 go-musicfox，另一种依赖于 mpris，并且从其中获取歌词。
+
+#### 修改 go-musicfox 的运行模式
+
+该模式支持 Linux 及 Windows 平台。主要依赖于修改后的 go-musicfox 客户端。修改后的 go-musicfox 客户端在
+更新歌词时，都会通过 UDP 协议，发送当前当句歌词信息给桌面歌词程序，然后桌面歌词程序再进行窗口渲染，将歌词文本
+渲染在窗口中。在该模式下，桌面歌词程序并不知道完整的歌词信息，仅知道当前时间下的单句歌词信息。
+
+大概工作流程为： 修改后的go-musicfox --发送歌词--> lyric-for-musicfox
+
+#### 依赖于 mpris 的运行模式
+
+该模式仅支持 Linux, 可以在设定界面中启用设置。桌面歌词程序会从 mpris 中获取当前播放中的歌曲的完整歌词信息，
+并内置计时器计算当前时间下应该显示的歌词进行渲染, 从而不需要修改后的 musicfox。
+
+大概工作流程为：go-musicfox --更新歌词及播放状态--> mpris --获取信息--> lyric-for-musicfox
+
+### 配置
 
 ![setting window](./docs/3.png)
 
