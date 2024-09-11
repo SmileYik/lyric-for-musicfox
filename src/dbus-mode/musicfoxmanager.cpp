@@ -286,12 +286,16 @@ void MusicfoxManager::listen(int timeout)
     while (nullptr != (msg = dbus_connection_pop_message(dbus_conn))) {
         const char* destination = dbus_message_get_destination(msg);
         const char* sender = dbus_message_get_sender(msg);
+        const char* path = dbus_message_get_path(msg);
         // 检查是否是 musicfox 发出的或者接收的
         if (
             destination != nullptr && (0 == strcmp(destination, this->name.c_str()) || 0 == strcmp(destination, this->owner.c_str())) ||
             sender != nullptr && (0 == strcmp(sender, this->name.c_str()) || 0 == strcmp(sender, this->owner.c_str()))
         )
         {
+            DCODE(
+                std::cout << "hit lisen" << std::endl;
+            );
             DBusMessageIter iter;
             dbus_message_iter_init(msg, &iter);
 
@@ -350,6 +354,11 @@ void MusicfoxManager::listen(int timeout)
                 }
             }
         }
+        else if (nullptr != path && nullptr != strstr(path, "mpris"))
+        {
+            this->found_musicfox = false;
+            find_musicfox();
+        }
         dbus_message_unref(msg);
     }
 }
@@ -365,6 +374,8 @@ void MusicfoxManager::listen_loop()
 
 bool MusicfoxManager::get_property(const char* destination, const char* interface, const char* properties, DBusMessage*& dbus_msg, DBusMessage*& dbus_rpl)
 {
+    if (!found_musicfox) return false;
+
     DBusError dbus_error;
 
     dbus_error_init(&dbus_error);
@@ -372,6 +383,7 @@ bool MusicfoxManager::get_property(const char* destination, const char* interfac
     {
         dbus_connection_unref(this->dbus_conn);
         this->dbus_conn = nullptr;
+        this->found_musicfox = false;
         return false;
     }
     else if (!dbus_message_append_args(dbus_msg, DBUS_TYPE_STRING, &interface,
@@ -385,6 +397,8 @@ bool MusicfoxManager::get_property(const char* destination, const char* interfac
         dbus_message_unref(dbus_msg);
         perror(dbus_error.name);
         perror(dbus_error.message);
+        this->found_musicfox = false;
+        find_musicfox();
         return false;
     }
     return true;

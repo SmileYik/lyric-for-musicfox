@@ -14,12 +14,9 @@ LyricController::LyricController(int _interval, int _positionUpdateInterval) :
     {
         DEBUG("connect to dbus failed");
     }
-    else if (!musicfoxManager.find_musicfox())
-    {
-        DEBUG("not found musicfox");
-    }
     else
     {
+        musicfoxManager.find_musicfox();
         DEBUG("launching listener");
         musicfoxManager.add_listener(metadataListener);
         musicfoxManager.add_listener(playbackStatusListener);
