@@ -3,7 +3,6 @@
 #include <QApplication>
 #include "settingwindow.h"
 #include "setting.h"
-
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);

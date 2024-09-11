@@ -36,6 +36,46 @@ set(PROJECT_SOURCES
         src/lyricwidget.cpp
 )
 
+set(PROJECT_INCLUDE_DIRECTORIES)
+
+set(TARGET_LINK_LIBRARY_LIST
+    Qt${QT_VERSION_MAJOR}::Widgets
+    Qt${QT_VERSION_MAJOR}::Network
+)
+
+if(MSVC)
+    message("-- * msvc setting")
+    add_compile_options("/permissive-")
+    add_compile_options("/Zc:__cplusplus")
+    add_compile_options("/MT")
+    set_target_properties(lyric-for-musicfox PROPERTIES CXX_STANDARD 17)
+    target_compile_options(lyric-for-musicfox PUBLIC "/Zc:__cplusplus" PUBLIC "/permissive-" PUBLIC "/MT")
+elseif(UNIX)
+    message("-- * enable mpris")
+    list(APPEND PROJECT_SOURCES
+        src/dbus-mode/musicfoxmanager.h
+        src/dbus-mode/musicfoxmanager.cpp
+        src/dbus-mode/mprismetadata.h
+        src/dbus-mode/mprismetadata.cpp
+        src/dbus-mode/lyric.h
+        src/dbus-mode/lyric.cpp
+        src/dbus-mode/qtlistener.h
+        src/dbus-mode/qtlistener.cpp
+        src/dbus-mode/lyriccontroller.h
+        src/dbus-mode/lyriccontroller.cpp
+        src/dbus-mode/lyricnetworkcontroller.h
+        src/dbus-mode/lyricnetworkcontroller.cpp
+    )
+    list(APPEND TARGET_LINK_LIBRARY_LIST
+        dbus-1
+    )
+    list(APPEND PROJECT_INCLUDE_DIRECTORIES
+        /usr/lib/dbus-1.0/include/
+        /usr/include/dbus-1.0/
+    )
+    add_definitions(-DLINUX)
+endif()
+
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(lyric-for-musicfox
         MANUAL_FINALIZATION
@@ -59,16 +99,8 @@ else()
     endif()
 endif()
 
-target_link_libraries(lyric-for-musicfox PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network)
-
-if(MSVC)
-    message("msvc")
-    add_compile_options("/permissive-")
-    add_compile_options("/Zc:__cplusplus")
-    add_compile_options("/MT")
-    set_target_properties(lyric-for-musicfox PROPERTIES CXX_STANDARD 17)
-    target_compile_options(lyric-for-musicfox PUBLIC "/Zc:__cplusplus" PUBLIC "/permissive-" PUBLIC "/MT")
-endif()
+target_include_directories(lyric-for-musicfox PRIVATE ${PROJECT_INCLUDE_DIRECTORIES})
+target_link_libraries(lyric-for-musicfox PRIVATE ${TARGET_LINK_LIBRARY_LIST})
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
@@ -133,4 +165,9 @@ if(SKIP_BUILD_MUSICFOX)
     message("-- * Skip build patched musicfox.")
 else()
     add_dependencies(lyric-for-musicfox musicfox)
+endif()
+
+if(DEBUG_FLAG)
+    message("-- * Enable debug log")
+    add_definitions(-DDEBUG_FLAG)
 endif()

@@ -4,7 +4,7 @@
 #ifdef DEBUG_FLAG
 #  include <QDebug>
 #  define DEBUG(CODE) qDebug() << CODE
-#  define DCODE(CODE) CODE
+#  define DCODE(CODE) {CODE;}
 #else
 #  include <QDebug>
 #  define DEBUG(CODE)

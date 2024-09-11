@@ -12,6 +12,8 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 
+class LyricNetworkController;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -21,6 +23,7 @@ public:
     ~MainWindow();
     bool isRunning();
 
+
 private:
     QUdpSocket* server;
     Ui::MainWindow *ui;
@@ -29,6 +32,8 @@ private:
     QString currentLyric;
     QFont defaultFont;
     qint64 index;
+    LyricNetworkController* mprisLyricController = nullptr;
+
 private:
     void closeEvent(QCloseEvent* event) override;
 

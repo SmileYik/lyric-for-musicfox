@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QResizeEvent>
+#include <QTimer>
 
 class LyricWidget : public QWidget
 {
@@ -10,7 +11,7 @@ class LyricWidget : public QWidget
 public:
     explicit LyricWidget(QWidget *parent = nullptr);
     ~LyricWidget();
-    void setText(const QString& text);
+    void setText(const QString& text, int64_t pmills = -1);
     void setSpeed(const double speed);
     void setColor(const QString& color);
     void tick();
@@ -18,6 +19,14 @@ public:
     void resizeEvent(QResizeEvent* event) override;
     QFont getFont() const;
     void setFont(const QFont &newFont);
+    void enableAutoTick(int64_t period);
+    void pauseAutoTick(bool flag);
+
+private slots:
+    void doTick();
+
+signals:
+    void needRepaint();
 
 private:
     double speed;
@@ -34,6 +43,8 @@ private:
      */
     bool front = true;
     int maxWidth;
+    QTimer* autoTickTimer = nullptr;
+    int64_t autoTickPeriod;
 };
 
 #endif // LYRICWIDGET_H

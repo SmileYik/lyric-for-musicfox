@@ -2,6 +2,7 @@
 #include <QPainter>
 #include <QFontMetrics>
 #include "debug.h"
+#include <QThread>
 
 LyricWidget::LyricWidget(QWidget *parent)
     : QWidget(parent)
@@ -11,10 +12,15 @@ LyricWidget::LyricWidget(QWidget *parent)
 
 LyricWidget::~LyricWidget()
 {
-
+    if (this->autoTickTimer)
+    {
+        disconnect(this->autoTickTimer);
+        this->autoTickTimer->stop();
+        this->autoTickTimer->deleteLater();
+    }
 }
 
-void LyricWidget::setText(const QString &text)
+void LyricWidget::setText(const QString &text, int64_t pmills)
 {
     this->originText = QString(text);
     this->offset = 0;
@@ -51,7 +57,7 @@ void LyricWidget::setText(const QString &text)
     for (auto begin = lines.begin(),
               end   = lines.end(); begin != end; ++begin)
     {
-        // *begin = QString("").append(*begin).append(" ");
+        *begin = QString(" ").append(*begin).append("   ");
         QRect rect = fm.boundingRect(*begin);
         maxLength = std::max(maxLength, rect.width());
     }
@@ -74,8 +80,15 @@ void LyricWidget::setText(const QString &text)
     originText = newLines.isEmpty() ? "" : newLines.join("\n");
     speed = maxWidth / width() * 16;
     offset = -speed;
-    DEBUG("Width" << width() << "Need Scrool: " << needScroll);
+
+    if (pmills != -1 && this->autoTickTimer)
+    {
+        speed = (maxWidth - width() - offset) / (pmills / 1000);
+    }
+
+    DEBUG("Width" << width() << "Need Scroll: " << needScroll);
     DEBUG(originText);
+    update();
 }
 
 void LyricWidget::setSpeed(const double speed)
@@ -88,7 +101,33 @@ void LyricWidget::setColor(const QString &color)
     this->color = QColor(color);
 }
 
-void LyricWidget::tick()
+void LyricWidget::enableAutoTick(int64_t period)
+{
+    if (this->autoTickTimer != nullptr) return;
+    this->autoTickTimer = new QTimer(this);
+    this->autoTickPeriod = period;
+
+    connect(this->autoTickTimer, &QTimer::timeout, this, &LyricWidget::doTick);
+
+    this->autoTickTimer->setInterval(period);
+    this->autoTickTimer->start();
+}
+
+void LyricWidget::pauseAutoTick(bool flag)
+{
+    if (this->autoTickTimer == nullptr) return;
+    if (flag)
+    {
+        this->autoTickTimer->stop();
+    }
+    else
+    {
+        this->autoTickTimer->start();
+    }
+}
+
+
+void LyricWidget::doTick()
 {
     update();
     if (!needScroll)
@@ -107,7 +146,14 @@ void LyricWidget::tick()
             front = true;
         }
     }
-    offset = offset + (front ? speed : -speed);
+    offset = offset + (front ? speed : -speed) * (this->autoTickTimer->interval() + 2);
+}
+
+
+void LyricWidget::tick()
+{
+    if (nullptr != autoTickTimer) return;
+    doTick();
 }
 
 void LyricWidget::paintEvent(QPaintEvent *event)
@@ -141,7 +187,7 @@ void LyricWidget::paintEvent(QPaintEvent *event)
         int x = (currentWidth - w) >> 1;
         int y = idx * lineHeight;
         QRect rect = QRect(0, y, currentWidth, y + lineHeight);
-        DEBUG(rect << *begin);
+        // DEBUG(rect << *begin);
         painter.drawText(rect, Qt::AlignmentFlag::AlignCenter, *begin);
         ++idx;
     }
