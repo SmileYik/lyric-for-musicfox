@@ -70,7 +70,6 @@ void SettingWindow::initialSetting()
 
 void SettingWindow::applySettingToForm()
 {
-
     DEBUG(QString::fromStdString(setting.get(KEY_FONT_COLOR)));
     ui->labelColorPreview->setText(QString::fromStdString(setting.get(KEY_FONT_COLOR)));
     ui->labelColorPreview->setStyleSheet(QString("background-color: %1").arg(setting.get(KEY_FONT_COLOR).c_str()));
@@ -81,6 +80,7 @@ void SettingWindow::applySettingToForm()
     ui->checkBoxItalic->setChecked(setting.getBool(KEY_FONT_ITALIC));
     ui->checkBoxFrameLess->setChecked(setting.getBool(KEY_FRAME_LESS));
     ui->checkBoxStayOnTop->setChecked(setting.getBool(KEY_FLAGS_STAY_ON_TOP));
+    ui->checkBoxEnableMpris->setChecked(setting.getBool(KEY_ENABLE_MPRIS));
 }
 
 void SettingWindow::on_pushButtonChooseColor_clicked()
