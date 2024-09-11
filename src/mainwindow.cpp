@@ -165,7 +165,7 @@ void MainWindow::handleCommand(QString command)
         setVisible(true);
         return;
     }
-    else if (command[0] == "LYRIC_ENABLE_AUTO_TICK")
+    else if (commands[0] == "LYRIC_ENABLE_AUTO_TICK")
     {
         this->lyric->enableAutoTick(commands[1].toInt());
     }
