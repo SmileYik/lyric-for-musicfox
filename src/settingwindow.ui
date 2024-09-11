@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>432</width>
-    <height>312</height>
+    <width>368</width>
+    <height>334</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,7 +15,7 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_2">
-    <item row="0" column="0" colspan="2">
+    <item row="0" column="0" colspan="4">
      <widget class="QWidget" name="widget_3" native="true">
       <layout class="QGridLayout" name="gridLayout">
        <item row="0" column="0">
@@ -93,7 +93,7 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="1">
+    <item row="1" column="1" colspan="2">
      <widget class="QCheckBox" name="checkBoxFrameLess">
       <property name="toolTip">
        <string>设定窗口是否拥有边框，仅发送信号至正在运行中的歌词窗口，不保存配置信息到本地中</string>
@@ -103,7 +103,17 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="0">
+    <item row="1" column="3">
+     <widget class="QCheckBox" name="checkBoxEnableMpris">
+      <property name="toolTip">
+       <string>启用 Mpris 支持并启用新的歌词控制模式, 启用该项及禁用该项需要重新启动程序</string>
+      </property>
+      <property name="text">
+       <string>Enable Mpris</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0" colspan="2">
      <widget class="QPushButton" name="pushButtonPreview">
       <property name="toolTip">
        <string>在下方的文本标签内预览字体变化</string>
@@ -113,7 +123,7 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="1">
+    <item row="2" column="2" colspan="2">
      <widget class="QPushButton" name="pushButtonApply">
       <property name="toolTip">
        <string>应用配置至配置文件并且启动歌词窗口</string>
@@ -123,7 +133,7 @@
       </property>
      </widget>
     </item>
-    <item row="3" column="0">
+    <item row="3" column="0" colspan="2">
      <widget class="QPushButton" name="pushButtonReload">
       <property name="toolTip">
        <string>保存配置文件，发送重载信号至正在运行中的歌词窗口中</string>
@@ -133,7 +143,7 @@
       </property>
      </widget>
     </item>
-    <item row="3" column="1">
+    <item row="3" column="2" colspan="2">
      <widget class="QPushButton" name="pushButtonSaveSelf">
       <property name="toolTip">
        <string>发送保存位置信息信号至正在运行中的歌词窗口中</string>
@@ -143,7 +153,7 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="0" colspan="2">
+    <item row="4" column="0" colspan="4">
      <widget class="QPlainTextEdit" name="plainTextEditPreviewText">
       <property name="plainText">
        <string>TextLabel
@@ -151,7 +161,7 @@
       </property>
      </widget>
     </item>
-    <item row="5" column="0" colspan="2">
+    <item row="5" column="0">
      <widget class="QLabel" name="labelPreview">
       <property name="text">
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;TextLabel&lt;/p&gt;&lt;p&gt;文本标签&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>

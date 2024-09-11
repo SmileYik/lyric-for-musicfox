@@ -146,7 +146,7 @@ void LyricWidget::doTick()
             front = true;
         }
     }
-    offset = offset + (front ? speed : -speed) * (this->autoTickTimer->interval() + 2);
+    offset = offset + (front ? speed : -speed) * (this->autoTickTimer ? (this->autoTickTimer->interval() + 2) : 1);
 }
 
 

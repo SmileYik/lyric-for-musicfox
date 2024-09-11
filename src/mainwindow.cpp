@@ -37,10 +37,6 @@ MainWindow::MainWindow(QApplication* app, QWidget *parent)
     connect(server, SIGNAL(readyRead()), this, SLOT(receiveLyric()));
 
     emit needReloadSetting();
-
-#   ifdef LINUX
-    this->mprisLyricController = new LyricNetworkController(30, 6000);
-#   endif
 }
 
 MainWindow::~MainWindow()
@@ -101,7 +97,14 @@ void MainWindow::reloadSetting()
     setWindowFlag(Qt::FramelessWindowHint, setting.getBool(KEY_FRAME_LESS));
 
 # ifdef LINUX
-    this->lyric->enableAutoTick(10);
+    if (setting.getBool(KEY_ENABLE_MPRIS))
+    {
+        if (nullptr == this->mprisLyricController)
+        {
+            this->mprisLyricController = new LyricNetworkController(30, 6000);
+            this->lyric->enableAutoTick(10);
+        }
+    }
 # endif
 
     setVisible(true);

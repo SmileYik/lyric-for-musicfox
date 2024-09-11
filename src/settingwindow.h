@@ -30,6 +30,8 @@ private slots:
 
     void on_checkBoxFrameLess_clicked(bool checked);
 
+    void on_checkBoxEnableMpris_clicked(bool checked);
+
     void on_lineEditSize_editingFinished();
 
     void on_pushButtonPreview_clicked();

@@ -1,7 +1,7 @@
 #ifndef SETTING_H
 #define SETTING_H
 
-#define SETTING_FILE_NAME QApplication::applicationDirPath() + "/.netease-lyric.setting"
+#define SETTING_FILE_NAME QApplication::applicationDirPath() + "/.lyric-for-musicfox.setting"
 
 #define KEY_POS_X               "POS_X"
 #define KEY_POS_Y               "POS_Y"
@@ -16,6 +16,7 @@
 #define KEY_POS_V               "POS_V"
 #define KEY_FLAGS_STAY_ON_TOP   "STAY_ON_TOP"
 #define KEY_FRAME_LESS          "FRAME_LESS"
+#define KEY_ENABLE_MPRIS        "ENABLE_MPRIS"
 
 #define VALUE_LEFT "LEFT"
 #define VALUE_CENTER "CENTER"

@@ -14,6 +14,9 @@ SettingWindow::SettingWindow(QWidget *parent)
     ui->setupUi(this);
     ui->plainTextEditPreviewText->textChanged();
     connect(ui->plainTextEditPreviewText, &QPlainTextEdit::textChanged, this, &SettingWindow::previewLabelText);
+#   ifndef LINUX
+    ui->checkBoxEnableMpris->setEnabled(false);
+#   endif
 
     initialSetting();
     applySettingToForm();
@@ -56,6 +59,13 @@ void SettingWindow::initialSetting()
     {
         setting.put(KEY_FONT_SIZE, QString("%1").arg(ui->labelPreview->font().pointSize()).toStdString());
     }
+#   ifdef LINUX
+    if (!setting.has(KEY_ENABLE_MPRIS))
+    {
+        setting.putBool(KEY_ENABLE_MPRIS, true);
+        ui->checkBoxEnableMpris->setChecked(true);
+    }
+#   endif
 }
 
 void SettingWindow::applySettingToForm()
@@ -116,6 +126,11 @@ void SettingWindow::on_checkBoxStayOnTop_clicked(bool checked)
     s.writeDatagram(QString("LYRIC_CONFIG_STAY_ON_TOP %1").arg(checked ? 1 : 0).toUtf8(), QHostAddress::LocalHost, PORT);
 }
 
+void SettingWindow::on_checkBoxEnableMpris_clicked(bool checked)
+{
+    setting.putBool(KEY_ENABLE_MPRIS, checked);
+    previewLabel();
+}
 
 void SettingWindow::on_lineEditSize_editingFinished()
 {
