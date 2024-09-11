@@ -57,7 +57,7 @@ jobs:
       if: runner.os == 'Linux'
       shell: bash
       run: |
-        sudo apt-get install libflac-dev libasound2-dev dbus
+        sudo apt-get install libflac-dev libasound2-dev dbus libdbus-1-dev
         sudo find /  -name "dbus"
         sudo apt-cache search dbus
     
