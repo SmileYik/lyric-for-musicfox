@@ -4,6 +4,7 @@
 #include <QMessageBox>
 #include <QUdpSocket>
 #include <QPlainTextEdit>
+#include <qnamespace.h>
 #include "debug.h"
 #include "config.h"
 
@@ -73,6 +74,13 @@ void SettingWindow::applySettingToForm()
     DEBUG(QString::fromStdString(setting.get(KEY_FONT_COLOR)));
     ui->labelColorPreview->setText(QString::fromStdString(setting.get(KEY_FONT_COLOR)));
     ui->labelColorPreview->setStyleSheet(QString("background-color: %1").arg(setting.get(KEY_FONT_COLOR).c_str()));
+    if (setting.has(KEY_FONT_OUTLINE_COLOR))
+    {
+        ui->labelOutlineColorPreview->setText(QString::fromStdString(setting.get(KEY_FONT_OUTLINE_COLOR)));
+        ui->labelOutlineColorPreview->setStyleSheet(QString("background-color: %1").arg(setting.get(KEY_FONT_OUTLINE_COLOR).c_str()));
+    } else {
+        ui->labelOutlineColorPreview->setText("no outline");
+    }
 
     ui->fontComboBox->setCurrentFont(buildFondFromSetting());
     ui->lineEditSize->setText(QString::fromStdString(setting.get(KEY_FONT_SIZE)));
@@ -87,6 +95,14 @@ void SettingWindow::on_pushButtonChooseColor_clicked()
 {
     QColor color = QColorDialog::getColor(QColor(QString::fromStdString(setting.get(KEY_FONT_COLOR))), this);
     setting.put(KEY_FONT_COLOR, color.name().toStdString());
+    applySettingToForm();
+    previewLabel();
+}
+
+void SettingWindow::on_pushButtonChooseOutlineColor_clicked()
+{
+    QColor color = setting.has(KEY_FONT_OUTLINE_COLOR) ? QColorDialog::getColor(QColor(QString::fromStdString(setting.get(KEY_FONT_OUTLINE_COLOR))), this) : QColor(Qt::transparent);
+    setting.put(KEY_FONT_OUTLINE_COLOR, color.name().toStdString());
     applySettingToForm();
     previewLabel();
 }

@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>368</width>
-    <height>334</height>
+    <width>303</width>
+    <height>372</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Lyric For Musicfox - Setting</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout_2">
+   <layout class="QGridLayout" name="gridLayout_3">
     <item row="0" column="0" colspan="4">
      <widget class="QWidget" name="widget_3" native="true">
       <layout class="QGridLayout" name="gridLayout">
@@ -22,6 +22,44 @@
         <widget class="QLabel" name="labelFont">
          <property name="text">
           <string>Font</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" colspan="3">
+        <widget class="QFontComboBox" name="fontComboBox"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="labelSize">
+         <property name="text">
+          <string>Size</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="lineEditSize">
+         <property name="text">
+          <string>16</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QCheckBox" name="checkBoxBold">
+         <property name="text">
+          <string>Bold</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3">
+        <widget class="QCheckBox" name="checkBoxItalic">
+         <property name="text">
+          <string>Italic</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="labelColor">
+         <property name="text">
+          <string>Color</string>
          </property>
         </widget>
        </item>
@@ -35,20 +73,6 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
-        <widget class="QLineEdit" name="lineEditSize">
-         <property name="text">
-          <string>16</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="3">
-        <widget class="QCheckBox" name="checkBoxItalic">
-         <property name="text">
-          <string>Italic</string>
-         </property>
-        </widget>
-       </item>
        <item row="2" column="2" colspan="2">
         <widget class="QPushButton" name="pushButtonChooseColor">
          <property name="text">
@@ -56,27 +80,27 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="1" colspan="3">
-        <widget class="QFontComboBox" name="fontComboBox"/>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="labelColor">
+       <item row="3" column="0">
+        <widget class="QLabel" name="labelColor_3">
          <property name="text">
-          <string>Color</string>
+          <string>Outline Color</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="2">
-        <widget class="QCheckBox" name="checkBoxBold">
+       <item row="3" column="1">
+        <widget class="QLabel" name="labelOutlineColorPreview">
          <property name="text">
-          <string>Bold</string>
+          <string>#000000</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="labelSize">
+       <item row="3" column="2" colspan="2">
+        <widget class="QPushButton" name="pushButtonChooseOutlineColor">
          <property name="text">
-          <string>Size</string>
+          <string>Choose Color</string>
          </property>
         </widget>
        </item>

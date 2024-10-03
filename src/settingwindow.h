@@ -20,6 +20,8 @@ public:
 private slots:
     void on_pushButtonChooseColor_clicked();
 
+    void on_pushButtonChooseOutlineColor_clicked();
+
     void on_fontComboBox_currentFontChanged(const QFont &f);
 
     void on_checkBoxBold_clicked(bool checked);
