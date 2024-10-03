@@ -14,6 +14,7 @@ public:
     void setText(const QString& text, int64_t pmills = -1);
     void setSpeed(const double speed);
     void setColor(const QString& color);
+    void setOutlineColor(const QString& color);
     void tick();
     void paintEvent(QPaintEvent* event) override;
     void resizeEvent(QResizeEvent* event) override;
@@ -21,6 +22,9 @@ public:
     void setFont(const QFont &newFont);
     void enableAutoTick(int64_t period);
     void pauseAutoTick(bool flag);
+
+private:
+    void drawText(QPainter& painter, const QRect& rect, const QFont& font, const QString& text, const QColor& fontColor, const QColor& outlineColor = QColor(Qt::transparent), int flags = Qt::AlignmentFlag::AlignCenter);
 
 private slots:
     void doTick();
@@ -33,6 +37,7 @@ private:
     QString originText;
     QFont font;
     QColor color;
+    QColor outlineColor = QColor(Qt::transparent);
     double offset = 0;
     /**
      * 是否需要滚动

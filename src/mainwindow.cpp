@@ -92,6 +92,10 @@ void MainWindow::reloadSetting()
     lyric->setColor(QString::fromStdString(setting.get(KEY_FONT_COLOR)));
     lyric->setSpeed(11);
     lyric->setBaseSize(width(), height());
+    if (setting.has(KEY_FONT_OUTLINE_COLOR))
+    {
+        lyric->setOutlineColor(QString::fromStdString(setting.get(KEY_FONT_OUTLINE_COLOR)));
+    }
 
     setWindowFlag(Qt::WindowStaysOnTopHint, setting.getBool(KEY_FLAGS_STAY_ON_TOP));
     setWindowFlag(Qt::FramelessWindowHint, setting.getBool(KEY_FRAME_LESS));

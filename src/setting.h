@@ -8,6 +8,7 @@
 #define KEY_WIDTH               "WIDTH"
 #define KEY_HEIGHT              "HEIGHT"
 #define KEY_FONT_COLOR          "FONT_COLOR"
+#define KEY_FONT_OUTLINE_COLOR  "FONT_OUTLINE_COLOR"
 #define KEY_FONT_SIZE           "FONT_SIZE"
 #define KEY_FONT_FAMILY         "FONT_FIMALY"
 #define KEY_FONT_BOLD           "FONT_BOLD"

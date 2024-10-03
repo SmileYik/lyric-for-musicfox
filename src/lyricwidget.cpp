@@ -101,6 +101,12 @@ void LyricWidget::setColor(const QString &color)
     this->color = QColor(color);
 }
 
+void LyricWidget::setOutlineColor(const QString& color)
+{
+    this->outlineColor = QColor(color);
+}
+
+
 void LyricWidget::enableAutoTick(int64_t period)
 {
     if (this->autoTickTimer != nullptr) return;
@@ -172,7 +178,8 @@ void LyricWidget::paintEvent(QPaintEvent *event)
 
     if (needScroll)
     {
-        painter.drawText(QRect(-offset, 0, width() + offset, height()), Qt::AlignmentFlag::AlignVCenter | Qt::AlignLeft, originText);
+        drawText(painter, QRect(-offset, 0, width() + offset, height()), font, originText, color, outlineColor, Qt::AlignmentFlag::AlignVCenter | Qt::AlignLeft);
+        // painter.drawText(QRect(-offset, 0, width() + offset, height()), Qt::AlignmentFlag::AlignVCenter | Qt::AlignLeft, originText);
         return;
     }
 
@@ -188,10 +195,29 @@ void LyricWidget::paintEvent(QPaintEvent *event)
         int y = idx * lineHeight;
         QRect rect = QRect(0, y, currentWidth, y + lineHeight);
         // DEBUG(rect << *begin);
-        painter.drawText(rect, Qt::AlignmentFlag::AlignCenter, *begin);
+        // painter.drawText(rect, Qt::AlignmentFlag::AlignCenter, *begin);
+
+        drawText(painter, rect, font, *begin, color, outlineColor, Qt::AlignmentFlag::AlignCenter);
         ++idx;
     }
 }
+
+void LyricWidget::drawText(QPainter& painter, const QRect& rect, const QFont& font, const QString& text, const QColor& fontColor, const QColor& outlineColor, int flags)
+{
+    if (!font.bold() && outlineColor != QColor(Qt::transparent))
+    {
+        QFont bold(font);
+        bold.setBold(true);
+        painter.setFont(bold);
+        painter.setPen(outlineColor);
+        painter.drawText(rect, flags, text);
+    }
+
+    painter.setFont(font);
+    painter.setPen(fontColor);
+    painter.drawText(rect, flags, text);
+}
+
 
 void LyricWidget::resizeEvent(QResizeEvent *event)
 {
