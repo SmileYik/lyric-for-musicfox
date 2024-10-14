@@ -176,7 +176,7 @@ void SettingWindow::on_pushButtonApply_clicked()
     setting.putBool(KEY_FLAGS_STAY_ON_TOP, ui->checkBoxStayOnTop->isChecked());
     setting.store();
     QMessageBox::information(this, "Information", "If you want configurate in one day, "
-                                                  "you can use command 'netease-lyric setting'");
+                                                  "you can use command 'lyric-for-musicfox setting'");
     this->close();
     application->exit(0);
 }
