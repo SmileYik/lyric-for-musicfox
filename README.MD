@@ -5,6 +5,7 @@
 Mpris 模式并保存，而免于运行打补丁的 musicfox。
 
 如果鼠标事件无法正常穿透则使用 `-platform xcb` 参数尝试启动，即 `./lyric-for-musicfox -platform xcb`。
+WINDOWS 下运行会出现无法移动窗口现象，需要改配置文件+反复开关歌词程序以确定位置。
 
 ### 构建
 
