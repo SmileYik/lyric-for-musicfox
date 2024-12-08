@@ -1,7 +1,7 @@
 #ifndef SETTING_H
 #define SETTING_H
 
-#define SETTING_FILE_NAME QApplication::applicationDirPath() + "/.lyric-for-musicfox.setting"
+#define SETTING_FILE_NAME QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + "/.lyric-for-musicfox.setting"
 
 #define KEY_POS_X               "POS_X"
 #define KEY_POS_Y               "POS_Y"
@@ -26,7 +26,7 @@
 #include <string>
 #include <map>
 #include <QApplication>
-
+#include <QStandardPaths>
 class Setting
 {
 public:
