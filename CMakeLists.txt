@@ -59,13 +59,9 @@ if(UNIX)
         src/dbus-mode/lyricnetworkcontroller.h
         src/dbus-mode/lyricnetworkcontroller.cpp
     )
+    find_package(DBus1 REQUIRED)
     list(APPEND TARGET_LINK_LIBRARY_LIST
         dbus-1
-    )
-    list(APPEND PROJECT_INCLUDE_DIRECTORIES
-        /usr/lib/dbus-1.0/include/
-        /usr/include/dbus-1.0/
-        /usr/lib/x86_64-linux-gnu/dbus-1.0/include
     )
     add_definitions(-DLINUX)
 endif()
