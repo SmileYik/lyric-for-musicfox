@@ -102,7 +102,7 @@ else()
             ${PROJECT_SOURCES}
         )
         if(UNIX)
-            qt_add_executable(mpris-lyric-sender ${MPRIS_LYRIC_SENDER_SOURCES})
+            add_executable(mpris-lyric-sender ${MPRIS_LYRIC_SENDER_SOURCES})
         endif()
     endif()
 endif()
