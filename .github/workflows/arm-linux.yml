@@ -49,19 +49,14 @@ jobs:
       # uses: jurplel/install-qt-action@f03f05556819ceb3781ee2f455ec44c339d683c0
       shell: bash
       run: |
-        sudo apt-get install build-essential ninja-build libfontconfig1-dev libfreetype-dev libx11-dev libx11-xcb-dev libxcb-cursor-dev libxcb-glx0-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-render-util0-dev libxcb-shape0-dev libxcb-shm0-dev libxcb-sync-dev libxcb-util-dev libxcb-xfixes0-dev libxcb-xinerama0-dev  libxcb-xkb-dev libxcb1-dev  libxext-dev  libxfixes-dev  libxi-dev  libxkbcommon-dev  libxkbcommon-x11-dev libxrender-dev
+        sudo apt-get install wget build-essential ninja-build
         mkdir -p ${{ github.workspace }}/qt
         cd ${{ github.workspace }}/qt
-        git clone "https://codereview.qt-project.org/qt/qt5"
-        cd qt5/
-        git checkout 6.5.3
-        perl init-repository -f
-        cd ..
-        mkdir ${{ github.workspace }}/qt/qt-hostbuild
-        cd ${{ github.workspace }}/qt/qt-hostbuild/
-        cmake ../qt5/qtbase -GNinja -DCMAKE_BUILD_TYPE=Release -DQT_BUILD_EXAMPLES=OFF -DQT_BUILD_TESTS=OFF -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/qt/qt-host 
+        wget https://download.qt.io/official_releases/qt/6.5/6.5.3/submodules/qtbase-everywhere-src-6.5.3.tar.xz -O qtbase.tar.xz
+        tar -xf qtbase.tar.xz
+        cd qtbase-everywhere-src-6.5.3
+        ./configure -no-opengl -developer-build -nomake tests -nomake examples
         cmake --build . --parallel
-        cmake --install .
     
     - name: Install Qt for Android
       uses: jurplel/install-qt-action@v4
@@ -94,7 +89,7 @@ jobs:
         -DCMAKE_CXX_COMPILER=/usr/bin/${{ matrix.cpp_compiler }}
         -DCMAKE_C_COMPILER=/usr/bin/${{ matrix.c_compiler }}
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
-        -DQT_HOST_PATH=${{ github.workspace }}/qt/qt-host
+        -DQT_HOST_PATH=${{ github.workspace }}/qt/qtbase-everywhere-src-6.5.3
         -S ${{ github.workspace }}
 
     - name: Build
