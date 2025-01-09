@@ -43,8 +43,17 @@ jobs:
       shell: bash
       run: |
         sudo apt-get install libflac-dev libasound2-dev dbus libdbus-1-dev gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
+
+    - name: Install Qt for Linux
+      # You may pin to the exact commit or the version.
+      # uses: jurplel/install-qt-action@f03f05556819ceb3781ee2f455ec44c339d683c0
+      uses: jurplel/install-qt-action@v4.0.0
+      with:
+        # Version of Qt to install
+        version: 6.5.3
+        dir: ${{ github.workspace }}/qt
     
-    - name: Install Qt
+    - name: Install Qt for Android
       uses: jurplel/install-qt-action@v4
       with:
         version: '6.5.3'
@@ -75,6 +84,7 @@ jobs:
         -DCMAKE_CXX_COMPILER=/usr/bin/${{ matrix.cpp_compiler }}
         -DCMAKE_C_COMPILER=/usr/bin/${{ matrix.c_compiler }}
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+        -DQT_HOST_PATH=${{ github.workspace }}/qt
         -S ${{ github.workspace }}
 
     - name: Build
