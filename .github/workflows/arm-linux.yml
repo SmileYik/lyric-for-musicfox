@@ -42,16 +42,51 @@ jobs:
     - name: Install depends of go-musicfox
       shell: bash
       run: |
-        sudo apt-get install libflac-dev libasound2-dev dbus libdbus-1-dev gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
+        sudo apt-get install git libflac-dev libasound2-dev dbus libdbus-1-dev gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
 
     - name: Install Qt for Linux
       # You may pin to the exact commit or the version.
       # uses: jurplel/install-qt-action@f03f05556819ceb3781ee2f455ec44c339d683c0
-      uses: jurplel/install-qt-action@v4.0.0
-      with:
-        # Version of Qt to install
-        version: 6.5.3
-        dir: ${{ github.workspace }}/qt
+      shell: bash
+      run: |
+        sudo apt-get install install \
+          libfontconfig1-dev \
+          libfreetype-dev \
+          libx11-dev \
+          libx11-xcb-dev \
+          libxcb-cursor-dev \
+          libxcb-glx0-dev \
+          libxcb-icccm4-dev \
+          libxcb-image0-dev \
+          libxcb-keysyms1-dev \
+          libxcb-randr0-dev \
+          libxcb-render-util0-dev \
+          libxcb-shape0-dev \
+          libxcb-shm0-dev \
+          libxcb-sync-dev \
+          libxcb-util-dev \
+          libxcb-xfixes0-dev \
+          libxcb-xinerama0-dev \
+          libxcb-xkb-dev \
+          libxcb1-dev \
+          libxext-dev \
+          libxfixes-dev \
+          libxi-dev \
+          libxkbcommon-dev \
+          libxkbcommon-x11-dev \
+          libxrender-dev
+        mkdir -p ${{ github.workspace }}/qt
+        cd ${{ github.workspace }}/qt
+        git clone "https://codereview.qt-project.org/qt/qt5"
+        cd qt5/
+        git checkout 6.5.3
+        perl init-repository -f
+        cd ..
+        mkdir ${{ github.workspace }}/qt/qt-hostbuild
+        cd ${{ github.workspace }}/qt/qt-hostbuild/
+        cmake ../qt5/ -GNinja -DCMAKE_BUILD_TYPE=Release -DQT_BUILD_EXAMPLES=OFF -DQT_BUILD_TESTS=OFF -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/qt/qt-host
+        cmake --build . --parallel
+        cmake --install .
     
     - name: Install Qt for Android
       uses: jurplel/install-qt-action@v4
@@ -84,7 +119,7 @@ jobs:
         -DCMAKE_CXX_COMPILER=/usr/bin/${{ matrix.cpp_compiler }}
         -DCMAKE_C_COMPILER=/usr/bin/${{ matrix.c_compiler }}
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
-        -DQT_HOST_PATH=${{ github.workspace }}/qt
+        -DQT_HOST_PATH=${{ github.workspace }}/qt/qt-host
         -S ${{ github.workspace }}
 
     - name: Build
