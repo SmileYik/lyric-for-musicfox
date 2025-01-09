@@ -52,7 +52,7 @@ jobs:
         target: 'android'
         arch: 'android_armv7'
         install-deps: 'true'
-        modules: 'qtcharts qtwebengine'
+        archives: "qtbase"
         
     - name: Set reusable strings
       # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
