@@ -25,11 +25,11 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         build_type: [Release]
-        c_compiler: [gcc-aarch64-linux-gnu]
+        c_compiler: [gcc]
         include:
           - os: ubuntu-latest
-            c_compiler: gcc-aarch64-linux-gnu
-            cpp_compiler: g++-aarch64-linux-gnu
+            c_compiler: aarch64-linux-gnu-gcc
+            cpp_compiler: aarch64-linux-gnu-g++
             
     steps:
     - uses: actions/checkout@v4
