@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include <QFontMetrics>
+#include <QHostAddress>
 #include "debug.h"
 #include "config.h"
 
@@ -23,19 +24,6 @@ MainWindow::MainWindow(QApplication* app, QWidget *parent)
     connect(this, &MainWindow::needReloadSetting, this, &MainWindow::reloadSetting);
     connect(this, &MainWindow::reciveCommand, this, &MainWindow::handleCommand);
 
-    // setup server
-    server = new QUdpSocket(this);
-    if (!server->bind(QHostAddress::LocalHost, PORT))
-    {
-        qInfo() << "已经有个实例正在运行了！";
-        server->close();
-        delete server;
-        server = nullptr;
-        return;
-    }
-    DEBUG("Running at port" << PORT);
-    connect(server, SIGNAL(readyRead()), this, SLOT(receiveLyric()));
-
     emit needReloadSetting();
 }
 
@@ -56,11 +44,6 @@ MainWindow::~MainWindow()
         this->mprisLyricController->deleteLater();
     }
 #   endif
-}
-
-bool MainWindow::isRunning()
-{
-    return server != nullptr;
 }
 
 void MainWindow::reloadSetting()
@@ -100,16 +83,38 @@ void MainWindow::reloadSetting()
     setWindowFlag(Qt::WindowStaysOnTopHint, setting.getBool(KEY_FLAGS_STAY_ON_TOP));
     setWindowFlag(Qt::FramelessWindowHint, setting.getBool(KEY_FRAME_LESS));
 
+    quint16 port = setting.has(KEY_RECEIVE_PORT) ? QString::fromStdString(setting.get(KEY_RECEIVE_PORT)).toInt() : PORT;
+
 # ifdef LINUX
     if (setting.getBool(KEY_ENABLE_MPRIS))
     {
         if (nullptr == this->mprisLyricController)
         {
-            this->mprisLyricController = new LyricNetworkController(30, 6000);
+            this->mprisLyricController = new LyricNetworkController(QHostAddress::LocalHost, port, 30, 6000);
             this->lyric->enableAutoTick(10);
         }
     }
 # endif
+
+    // setup server
+    if (nullptr != server) {
+        disconnect(server, SIGNAL(readyRead()), this, SLOT(receiveLyric()));
+        server->close();
+        delete server;
+        server = nullptr;
+    }
+    server = new QUdpSocket(this);
+    if (!server->bind(QHostAddress::Any, PORT))
+    {
+        qInfo() << "已经有个实例正在运行了！";
+        server->close();
+        delete server;
+        server = nullptr;
+        this->application->exit(0);
+        return;
+    }
+    DEBUG("Running at port" << PORT);
+    connect(server, SIGNAL(readyRead()), this, SLOT(receiveLyric()));
 
     setVisible(true);
 

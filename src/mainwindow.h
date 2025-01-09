@@ -21,10 +21,9 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QApplication* app, QWidget *parent = nullptr);
     ~MainWindow();
-    bool isRunning();
 
 private:
-    QUdpSocket* server;
+    QUdpSocket* server = nullptr;
     Ui::MainWindow *ui;
     QApplication* application;
     LyricWidget* lyric;

@@ -1,8 +1,8 @@
 #include "mainwindow.h"
-
 #include <QApplication>
 #include "settingwindow.h"
 #include "setting.h"
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -16,7 +16,6 @@ int main(int argc, char *argv[])
         if (a.exec() == 1) return 0;
     }
     MainWindow w(&a);
-    if (!w.isRunning()) return 0;
     w.show();
     return a.exec();
 }

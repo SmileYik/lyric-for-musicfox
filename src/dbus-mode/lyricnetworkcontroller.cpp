@@ -1,10 +1,11 @@
 #include "lyricnetworkcontroller.h"
 #include <QUdpSocket>
-#include "../config.h"
 #include "../debug.h"
 
-LyricNetworkController::LyricNetworkController(int interval, int positionUpdateInterval)
+LyricNetworkController::LyricNetworkController(QHostAddress _host, u_int16_t _port, int interval, int positionUpdateInterval)
     : QObject(),
+    host(_host),
+    port(_port),
     controller(new LyricController(interval, positionUpdateInterval))
 {
     connect(this->controller, &LyricController::lyricChanged, this, &LyricNetworkController::lyricChanged);
@@ -41,7 +42,7 @@ void LyricNetworkController::lyricChanged(const Lyric::LyricInfo lyricInfo)
         QUdpSocket().writeDatagram(
             QString("LYRIC %1 %2").arg(lyricInfo.time_to_next)
                                   .arg(newLyric).toUtf8(),
-            QHostAddress::LocalHost, PORT
+            host, port
         );
     }
 }
@@ -49,12 +50,12 @@ void LyricNetworkController::lyricChanged(const Lyric::LyricInfo lyricInfo)
 void LyricNetworkController::pause()
 {
     DEBUG("paused");
-    QUdpSocket().writeDatagram(QString("LYRIC_CONFIG_STOP_TICK").toUtf8(), QHostAddress::LocalHost, PORT);
+    QUdpSocket().writeDatagram(QString("LYRIC_CONFIG_STOP_TICK").toUtf8(), host, port);
 }
 
 void LyricNetworkController::play()
 {
     DEBUG("playing");
-    QUdpSocket().writeDatagram(QString("LYRIC_CONFIG_START_TICK").toUtf8(), QHostAddress::LocalHost, PORT);
+    QUdpSocket().writeDatagram(QString("LYRIC_CONFIG_START_TICK").toUtf8(), host, port);
 }
 

@@ -18,6 +18,7 @@
 #define KEY_FLAGS_STAY_ON_TOP   "STAY_ON_TOP"
 #define KEY_FRAME_LESS          "FRAME_LESS"
 #define KEY_ENABLE_MPRIS        "ENABLE_MPRIS"
+#define KEY_RECEIVE_PORT        "RECEIVE_PORT"
 
 #define VALUE_LEFT "LEFT"
 #define VALUE_CENTER "CENTER"

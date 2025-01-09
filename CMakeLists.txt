@@ -36,16 +36,7 @@ set(PROJECT_SOURCES
         src/lyricwidget.cpp
 )
 
-set(PROJECT_INCLUDE_DIRECTORIES)
-
-set(TARGET_LINK_LIBRARY_LIST
-    Qt${QT_VERSION_MAJOR}::Widgets
-    Qt${QT_VERSION_MAJOR}::Network
-)
-
-if(UNIX)
-    message("-- * enable mpris")
-    list(APPEND PROJECT_SOURCES
+set(DBUS_MPRIS_SOURCES
         src/dbus-mode/musicfoxmanager.h
         src/dbus-mode/musicfoxmanager.cpp
         src/dbus-mode/mprismetadata.h
@@ -58,11 +49,29 @@ if(UNIX)
         src/dbus-mode/lyriccontroller.cpp
         src/dbus-mode/lyricnetworkcontroller.h
         src/dbus-mode/lyricnetworkcontroller.cpp
-    )
+)
+
+set(MPRIS_LYRIC_SENDER_SOURCES
+        src/mpris-lyric-sender.cpp
+        ${DBUS_MPRIS_SOURCES}
+)
+
+set(PROJECT_INCLUDE_DIRECTORIES)
+
+set(TARGET_LINK_LIBRARY_LIST
+    Qt${QT_VERSION_MAJOR}::Widgets
+    Qt${QT_VERSION_MAJOR}::Network
+)
+set(MPRIS_LYRIC_SENDER_TARGET_LINK_LIBRARY_LIST
+    Qt${QT_VERSION_MAJOR}::Network
+)
+
+if(UNIX)
+    message("-- * enable mpris")
+    list(APPEND PROJECT_SOURCES ${DBUS_MPRIS_SOURCES})
     find_package(DBus1 REQUIRED)
-    list(APPEND TARGET_LINK_LIBRARY_LIST
-        dbus-1
-    )
+    list(APPEND TARGET_LINK_LIBRARY_LIST dbus-1)
+    list(APPEND MPRIS_LYRIC_SENDER_TARGET_LINK_LIBRARY_LIST dbus-1)
     add_definitions(-DLINUX)
 endif()
 
@@ -71,6 +80,12 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
     )
+    if(UNIX)
+        qt_add_executable(mpris-lyric-sender
+            MANUAL_FINALIZATION
+            ${MPRIS_LYRIC_SENDER_SOURCES}
+        )
+    endif()
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET lyric-for-musicfox APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
 #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
@@ -86,11 +101,19 @@ else()
         add_executable(lyric-for-musicfox
             ${PROJECT_SOURCES}
         )
+        if(UNIX)
+            qt_add_executable(mpris-lyric-sender ${MPRIS_LYRIC_SENDER_SOURCES})
+        endif()
     endif()
 endif()
 
 target_include_directories(lyric-for-musicfox PRIVATE ${PROJECT_INCLUDE_DIRECTORIES})
 target_link_libraries(lyric-for-musicfox PRIVATE ${TARGET_LINK_LIBRARY_LIST})
+
+if(UNIX)
+    target_include_directories(mpris-lyric-sender PRIVATE ${PROJECT_INCLUDE_DIRECTORIES})
+    target_link_libraries(mpris-lyric-sender PRIVATE ${MPRIS_LYRIC_SENDER_TARGET_LINK_LIBRARY_LIST})
+endif()
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
@@ -115,6 +138,10 @@ install(TARGETS lyric-for-musicfox
 
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(lyric-for-musicfox)
+    if(UNIX)
+        qt_finalize_executable(mpris-lyric-sender)
+    endif()
+    
 endif()
 
 # 生成带有自定端口的补丁
