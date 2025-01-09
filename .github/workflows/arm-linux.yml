@@ -78,8 +78,10 @@ jobs:
     - name: Modify CMakeLists.txt
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-      run: >
+      run: |
         sed -i "s/find_package(DBus1 REQUIRED)/list(APPEND PROJECT_INCLUDE_DIRECTORIES \/usr\/lib\/dbus-1.0\/include\/ \/usr\/include\/dbus-1.0\/ \/usr\/lib\/x86_64-linux-gnu\/dbus-1.0\/include)/g" ${{ github.workspace }}/CMakeLists.txt
+        sed -i "s/Widgets Network/Network/g" ${{ github.workspace }}/CMakeLists.txt 
+        sed "s/Qt\${QT_VERSION_MAJOR}::Widgets//g" ${{ github.workspace }}/CMakeLists.txt 
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
