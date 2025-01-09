@@ -25,7 +25,7 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         build_type: [Release]
-        c_compiler: [gcc]
+        c_compiler: [aarch64-linux-gnu-gcc]
         include:
           - os: ubuntu-latest
             c_compiler: aarch64-linux-gnu-gcc
@@ -67,6 +67,7 @@ jobs:
         -DCMAKE_CXX_COMPILER=/usr/bin/${{ matrix.cpp_compiler }}
         -DCMAKE_C_COMPILER=/usr/bin/${{ matrix.c_compiler }}
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+        "-DDBus1_DIR=/usr/lib/dbus-1.0/include;/usr/include/dbus-1.0;/usr/lib/x86_64-linux-gnu/dbus-1.0/include"
         -S ${{ github.workspace }}
 
     - name: Build
