@@ -84,7 +84,7 @@ jobs:
         -DCMAKE_CXX_COMPILER=/usr/bin/${{ matrix.cpp_compiler }}
         -DCMAKE_C_COMPILER=/usr/bin/${{ matrix.c_compiler }}
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
-        -DQT_HOST_PATH=${{ github.workspace }}/qt/qtbase
+        -DQT_HOST_PATH=${{ github.workspace }}/qt
         -S ${{ github.workspace }}
 
     - name: Build
