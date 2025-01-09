@@ -59,6 +59,13 @@ jobs:
       run: |
         echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
 
+    - name: Modify CMakeLists.txt
+      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
+      # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
+      run: >
+        sed -i "s/find_package(DBus1 REQUIRED)/list(APPEND PROJECT_INCLUDE_DIRECTORIES \/usr\/lib\/dbus-1.0\/include\/ \/usr\/include\/dbus-1.0\/ \/usr\/lib\/x86_64-linux-gnu\/dbus-1.0\/include)/g" ${{ github.workspace }}/CMakeLists.txt; \
+        cat ${{ github.workspace }}/CMakeLists.txt
+
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
@@ -67,7 +74,6 @@ jobs:
         -DCMAKE_CXX_COMPILER=/usr/bin/${{ matrix.cpp_compiler }}
         -DCMAKE_C_COMPILER=/usr/bin/${{ matrix.c_compiler }}
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
-        "-DDBus1_DIR=/usr/lib/dbus-1.0/include;/usr/include/dbus-1.0;/usr/lib/x86_64-linux-gnu/dbus-1.0/include"
         -S ${{ github.workspace }}
 
     - name: Build
