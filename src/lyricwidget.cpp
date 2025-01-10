@@ -3,6 +3,7 @@
 #include <QFontMetrics>
 #include "debug.h"
 #include <QThread>
+#include <QPainterPath>
 
 LyricWidget::LyricWidget(QWidget *parent)
     : QWidget(parent)
@@ -49,41 +50,24 @@ void LyricWidget::setText(const QString &text, int64_t pmills)
     // 对齐文本
     QFontMetrics fm(font);
     QStringList lines = tempText.split("\n");
-
-    int spaceWidth = fm.boundingRect("-").width();
-    DEBUG("Space Char Width: " << spaceWidth);
-
     int maxLength = 0;
     for (auto begin = lines.begin(),
               end   = lines.end(); begin != end; ++begin)
     {
-        *begin = QString(" ").append(*begin).append("   ");
-        QRect rect = fm.boundingRect(*begin);
-        maxLength = std::max(maxLength, rect.width());
+        maxLength = std::max(maxLength, fm.horizontalAdvance(*begin));
     }
     DEBUG("Max Line Width: " << maxLength);
 
-    QStringList newLines;
-    for (auto begin = lines.cbegin(),
-              end   = lines.cend(); begin != end; ++begin)
-    {
-        QRect rect = fm.boundingRect(*begin);
-        int lineWidth = rect.width();
-        int appendWidth = (width() - lineWidth) / spaceWidth;
-        DEBUG(*begin << QString("Width: ") << lineWidth);
-        // newLines << QString(*begin);
-        newLines << QString(" ").repeated(appendWidth / 2).append(*begin).append(QString(" ").repeated(appendWidth / 2 + (appendWidth & 0x1)));
-    }
-
     maxWidth = maxLength;
     needScroll = maxWidth > width();
-    originText = newLines.isEmpty() ? "" : newLines.join("\n");
-    speed = maxWidth / width() * 16;
+    originText = lines.isEmpty() ? "" : lines.join("\n");
+    speed = maxWidth * 1.0 / width() * 16;
     offset = -speed;
 
     if (pmills != -1 && this->autoTickTimer)
     {
-        speed = (maxWidth - width() - offset) / (pmills / 1000);
+        speed = (maxWidth - width() - offset) / (pmills / 1000.0);
+        offset = -speed;
     }
 
     DEBUG("Width" << width() << "Need Scroll: " << needScroll);
@@ -106,6 +90,10 @@ void LyricWidget::setOutlineColor(const QString& color)
     this->outlineColor = QColor(color);
 }
 
+void LyricWidget::setOutlineWidth(const int width)
+{
+    this->outlineWidth = width;
+}
 
 void LyricWidget::enableAutoTick(int64_t period)
 {
@@ -132,7 +120,6 @@ void LyricWidget::pauseAutoTick(bool flag)
     }
 }
 
-
 void LyricWidget::doTick()
 {
     update();
@@ -155,7 +142,6 @@ void LyricWidget::doTick()
     offset = offset + (front ? speed : -speed) * (this->autoTickTimer ? (this->autoTickTimer->interval() + 2) : 1);
 }
 
-
 void LyricWidget::tick()
 {
     if (nullptr != autoTickTimer) return;
@@ -176,48 +162,70 @@ void LyricWidget::paintEvent(QPaintEvent *event)
 #   endif
     painter.setPen(color);
 
-    if (needScroll)
-    {
-        drawText(painter, QRect(-offset, 0, width() + offset, height()), font, originText, color, outlineColor, Qt::AlignmentFlag::AlignVCenter | Qt::AlignLeft);
-        // painter.drawText(QRect(-offset, 0, width() + offset, height()), Qt::AlignmentFlag::AlignVCenter | Qt::AlignLeft, originText);
-        return;
-    }
-
     QFontMetrics fm(font);
     QStringList lines = originText.split("\n");
-    int lineHeight = height() / lines.size() * 0.8;
+    int lineRawHeight = height() / lines.size();
+    int lineHeight = lineRawHeight * 0.8;
     int idx = 0;
     int currentOffset = offset, currentWidth = width();
     for (auto begin = lines.cbegin(), end = lines.cend(); begin != end; ++begin)
     {
         int w = fm.boundingRect(*begin).width();
         int x = (currentWidth - w) >> 1;
-        int y = idx * lineHeight;
-        QRect rect = QRect(0, y, currentWidth, y + lineHeight);
-        // DEBUG(rect << *begin);
-        // painter.drawText(rect, Qt::AlignmentFlag::AlignCenter, *begin);
+        int y = idx * lineRawHeight;
 
-        drawText(painter, rect, font, *begin, color, outlineColor, Qt::AlignmentFlag::AlignCenter);
+        painter.save();
+        if (needScroll)
+        {
+            QRect rect = QRect(-offset, y, width() + offset, lineHeight);
+            drawText(painter, rect, font, *begin, color, outlineColor);
+        } else
+        {
+            QRect rect = QRect(0, y, currentWidth, lineHeight);
+            drawText(painter, rect, font, *begin, color, outlineColor);
+        }
+
+        painter.restore();
         ++idx;
     }
 }
 
-void LyricWidget::drawText(QPainter& painter, const QRect& rect, const QFont& font, const QString& text, const QColor& fontColor, const QColor& outlineColor, int flags)
+void LyricWidget::drawText(QPainter& painter, const QRect& rect, const QFont& font, const QString& text, const QColor& fontColor, const QColor& outlineColor)
 {
-    if (!font.bold() && outlineColor != QColor(Qt::transparent))
+    QFontMetrics fm(font);
+    QRect textRect = fm.boundingRect(text);
+    QString str = text;
+    int strLen = fm.horizontalAdvance(str);
+    int startX = rect.x() >= 0 ? rect.x() : 0;
+    QRect absRect(startX, rect.y(), rect.right() - startX, rect.height());
+    QTransform offset;
+    // 宽度布满矩形情况
+    if (absRect.width() < strLen)
     {
-        QFont bold(font);
-        bold.setBold(true);
-        painter.setFont(bold);
-        painter.setPen(outlineColor);
-        painter.drawText(rect, flags, text);
+        int len = fm.horizontalAdvance(str);
+        offset.translate(rect.x(), 0);
+    }
+    // 宽度没有布满，居中放置
+    else {
+        absRect.setX(absRect.x() + ((absRect.width() - strLen) >> 1));
     }
 
-    painter.setFont(font);
-    painter.setPen(fontColor);
-    painter.drawText(rect, flags, text);
-}
+    QPainterPath path;
+    path.addText(absRect.x(), absRect.bottom(), font, str);
 
+    QPen pen;
+    pen.setWidth(outlineWidth);
+    pen.setColor(outlineColor);
+    pen.setStyle(Qt::PenStyle::SolidLine);
+
+    painter.setTransform(offset);
+    painter.setRenderHint(QPainter::RenderHint::Antialiasing);
+    painter.setRenderHint(QPainter::RenderHint::TextAntialiasing);
+    painter.setRenderHint(QPainter::RenderHint::SmoothPixmapTransform);
+    painter.strokePath(path, pen);
+    painter.fillPath(path, QBrush(fontColor));
+
+}
 
 void LyricWidget::resizeEvent(QResizeEvent *event)
 {

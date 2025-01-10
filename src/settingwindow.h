@@ -50,6 +50,7 @@ private:
     Ui::SettingWindow *ui;
     QApplication* application;
     Setting setting;
+    qint16 port;
     void previewLabel();
     QFont buildFondFromSetting();
     void initialSetting();

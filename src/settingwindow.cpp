@@ -4,7 +4,7 @@
 #include <QMessageBox>
 #include <QUdpSocket>
 #include <QPlainTextEdit>
-#include <qnamespace.h>
+#include <QThread>
 #include "debug.h"
 #include "config.h"
 
@@ -89,6 +89,8 @@ void SettingWindow::applySettingToForm()
     ui->checkBoxFrameLess->setChecked(setting.getBool(KEY_FRAME_LESS));
     ui->checkBoxStayOnTop->setChecked(setting.getBool(KEY_FLAGS_STAY_ON_TOP));
     ui->checkBoxEnableMpris->setChecked(setting.getBool(KEY_ENABLE_MPRIS));
+
+    port = setting.has(KEY_RECEIVE_PORT) ? QString::fromStdString(setting.get(KEY_RECEIVE_PORT)).toInt() : PORT;
 }
 
 void SettingWindow::on_pushButtonChooseColor_clicked()
@@ -109,7 +111,6 @@ void SettingWindow::on_pushButtonChooseOutlineColor_clicked()
 
 void SettingWindow::on_fontComboBox_currentFontChanged(const QFont &f)
 {
-
     setting.put(KEY_FONT_FAMILY, f.family().toStdString());
     previewLabel();
 }
@@ -132,14 +133,14 @@ void SettingWindow::on_checkBoxFrameLess_clicked(bool checked)
 {
     // setting.putBool(KEY_FRAME_LESS, checked);
     QUdpSocket s;
-    s.writeDatagram(QString("LYRIC_CONFIG_FRAME_LESS %1").arg(checked ? 1 : 0).toUtf8(), QHostAddress::LocalHost, PORT);
+    s.writeDatagram(QString("LYRIC_CONFIG_FRAME_LESS %1").arg(checked ? 1 : 0).toUtf8(), QHostAddress::LocalHost, port);
 }
 
 void SettingWindow::on_checkBoxStayOnTop_clicked(bool checked)
 {
     // setting.putBool(KEY_FLAGS_STAY_ON_TOP, checked);
     QUdpSocket s;
-    s.writeDatagram(QString("LYRIC_CONFIG_STAY_ON_TOP %1").arg(checked ? 1 : 0).toUtf8(), QHostAddress::LocalHost, PORT);
+    s.writeDatagram(QString("LYRIC_CONFIG_STAY_ON_TOP %1").arg(checked ? 1 : 0).toUtf8(), QHostAddress::LocalHost, port);
 }
 
 void SettingWindow::on_checkBoxEnableMpris_clicked(bool checked)
@@ -186,19 +187,21 @@ void SettingWindow::on_pushButtonReload_clicked()
     setting.putBool(KEY_FRAME_LESS, ui->checkBoxFrameLess->isChecked());
     setting.putBool(KEY_FLAGS_STAY_ON_TOP, ui->checkBoxStayOnTop->isChecked());
     setting.store();
+
     QUdpSocket s;
-    s.writeDatagram(QString("LYRIC_CONFIG_RELOAD").toUtf8(), QHostAddress::LocalHost, PORT);
+    s.writeDatagram(QString("LYRIC_CONFIG_RELOAD").toUtf8(), QHostAddress::LocalHost, port);
 }
 
 void SettingWindow::on_pushButtonSaveSelf_clicked()
 {
     QUdpSocket s;
-    s.writeDatagram(QString("LYRIC_CONFIG_SAVE_SELF").toUtf8(), QHostAddress::LocalHost, PORT);
+    s.writeDatagram(QString("LYRIC_CONFIG_SAVE_SELF").toUtf8(), QHostAddress::LocalHost, port);
+    QThread::msleep(1000);
+    this->setting = Setting();
+    applySettingToForm();
 }
-
 
 void SettingWindow::closeEvent(QCloseEvent* event)
 {
     application->exit(1);
 }
-

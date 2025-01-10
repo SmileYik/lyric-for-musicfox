@@ -1,0 +1,3 @@
+.cache/**
+build/**
+musicfox-target-port.patch

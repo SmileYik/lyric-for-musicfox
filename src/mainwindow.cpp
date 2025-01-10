@@ -18,8 +18,8 @@ MainWindow::MainWindow(QApplication* app, QWidget *parent)
 {
     ui->setupUi(this);
     ui->verticalLayout->addWidget(lyric);
+
     setAttribute(Qt::WA_TranslucentBackground);
-    
     // 在 Windows 下, 一开始设置鼠标穿透属性会直接导致后续无法移动窗口
 #ifdef LINUX
     setAttribute(Qt::WA_TransparentForMouseEvents);
@@ -84,24 +84,37 @@ void MainWindow::reloadSetting()
     {
         lyric->setOutlineColor(QString::fromStdString(setting.get(KEY_FONT_OUTLINE_COLOR)));
     }
+    if (setting.has(KEY_FONT_OUTLINE_WIDTH))
+    {
+        lyric->setOutlineWidth(QString::fromStdString(setting.get(KEY_FONT_OUTLINE_WIDTH)).toInt());
+    }
 
     setWindowFlag(Qt::WindowStaysOnTopHint, setting.getBool(KEY_FLAGS_STAY_ON_TOP));
     setWindowFlag(Qt::FramelessWindowHint, setting.getBool(KEY_FRAME_LESS));
     setWindowFlag(Qt::WindowTransparentForInput, setting.getBool(KEY_FRAME_LESS));
     setAttribute(Qt::WA_TransparentForMouseEvents, setting.getBool(KEY_FRAME_LESS));
 
+    // 自动tick
+    int autoTick = QString::fromStdString(setting.get(KEY_LYRIC_AUTO_TICK, "0")).toInt();
     quint16 port = setting.has(KEY_RECEIVE_PORT) ? QString::fromStdString(setting.get(KEY_RECEIVE_PORT)).toInt() : PORT;
-
-# ifdef LINUX
+#   ifdef LINUX
     if (setting.getBool(KEY_ENABLE_MPRIS))
     {
         if (nullptr == this->mprisLyricController)
         {
             this->mprisLyricController = new LyricNetworkController(QHostAddress::LocalHost, port, 30, 6000);
-            this->lyric->enableAutoTick(10);
+            this->lyric->enableAutoTick(autoTick > 0 ? autoTick : 10);
         }
     }
-# endif
+#  else
+    if (autoTick > 0)
+    {
+        this->lyric->enableAutoTick(autoTick);
+    }
+    else {
+        this->lyric->pauseAutoTick(true);
+    }
+#  endif
 
     // setup server
     if (nullptr != server) {
@@ -124,9 +137,6 @@ void MainWindow::reloadSetting()
     connect(server, SIGNAL(readyRead()), this, SLOT(receiveLyric()));
 
     setVisible(true);
-
-    // ui->labelLyric->setFont(font);
-    // ui->labelLyric->setStyleSheet(QString("color: %1").arg(setting.get(KEY_FONT_COLOR, "#000000").c_str()));
 }
 
 void MainWindow::handleCommand(QString command)
@@ -187,8 +197,6 @@ void MainWindow::handleCommand(QString command)
     }
 }
 
-
-
 void MainWindow::receiveLyric()
 {
     QByteArray buffer;
@@ -222,7 +230,6 @@ void MainWindow::receiveLyric()
     }
     lyric->tick();
 }
-
 
 void MainWindow::closeEvent(QCloseEvent* event)
 {

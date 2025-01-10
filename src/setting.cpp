@@ -3,13 +3,14 @@
 #include <QFile>
 #include <QTextStream>
 #include <QDir>
+
 Setting::Setting()
 {
     QDir dir;
     if (!dir.exists(QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation)))
-{
-    dir.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation));
-}
+    {
+        dir.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation));
+    }
     QFile file(SETTING_FILE_NAME);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
@@ -33,7 +34,6 @@ const bool Setting::has(const std::string& key) const
 {
     return keyValues.count(key);
 }
-
 
 const std::string Setting::get(const std::string& key)
 {
