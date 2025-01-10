@@ -104,7 +104,7 @@ void MainWindow::reloadSetting()
         server = nullptr;
     }
     server = new QUdpSocket(this);
-    if (!server->bind(QHostAddress::Any, PORT))
+    if (!server->bind(QHostAddress::Any, port))
     {
         qInfo() << "已经有个实例正在运行了！";
         server->close();
