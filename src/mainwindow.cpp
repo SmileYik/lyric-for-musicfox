@@ -2,6 +2,7 @@
 #include "./ui_mainwindow.h"
 #include <QFontMetrics>
 #include <QHostAddress>
+#include <qnamespace.h>
 #include "debug.h"
 #include "config.h"
 
@@ -18,8 +19,12 @@ MainWindow::MainWindow(QApplication* app, QWidget *parent)
     ui->setupUi(this);
     ui->verticalLayout->addWidget(lyric);
     setAttribute(Qt::WA_TranslucentBackground);
+    
+    // 在 Windows 下, 一开始设置鼠标穿透属性会直接导致后续无法移动窗口
+#ifdef LINUX
     setAttribute(Qt::WA_TransparentForMouseEvents);
     setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Tool | Qt::WindowTransparentForInput);
+#endif
 
     connect(this, &MainWindow::needReloadSetting, this, &MainWindow::reloadSetting);
     connect(this, &MainWindow::reciveCommand, this, &MainWindow::handleCommand);
@@ -82,6 +87,8 @@ void MainWindow::reloadSetting()
 
     setWindowFlag(Qt::WindowStaysOnTopHint, setting.getBool(KEY_FLAGS_STAY_ON_TOP));
     setWindowFlag(Qt::FramelessWindowHint, setting.getBool(KEY_FRAME_LESS));
+    setWindowFlag(Qt::WindowTransparentForInput, setting.getBool(KEY_FRAME_LESS));
+    setAttribute(Qt::WA_TransparentForMouseEvents, setting.getBool(KEY_FRAME_LESS));
 
     quint16 port = setting.has(KEY_RECEIVE_PORT) ? QString::fromStdString(setting.get(KEY_RECEIVE_PORT)).toInt() : PORT;
 
