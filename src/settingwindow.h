@@ -46,6 +46,12 @@ private slots:
 
     void previewLabelText();
 
+    void on_lineEditOutlineWidth_textChanged(const QString &arg1);
+
+    void on_lineEditAutoTick_textChanged(const QString &arg1);
+
+    void on_lineEditPort_textChanged(const QString &arg1);
+
 private:
     Ui::SettingWindow *ui;
     QApplication* application;

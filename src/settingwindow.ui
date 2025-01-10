@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>303</width>
-    <height>372</height>
+    <width>317</width>
+    <height>439</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Lyric For Musicfox - Setting</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout_3">
+   <layout class="QGridLayout" name="gridLayout_2">
     <item row="0" column="0" colspan="4">
      <widget class="QWidget" name="widget_3" native="true">
       <layout class="QGridLayout" name="gridLayout">
@@ -69,7 +69,7 @@
           <string>#000000</string>
          </property>
          <property name="alignment">
-          <set>Qt::AlignCenter</set>
+          <set>Qt::AlignmentFlag::AlignCenter</set>
          </property>
         </widget>
        </item>
@@ -93,7 +93,7 @@
           <string>#000000</string>
          </property>
          <property name="alignment">
-          <set>Qt::AlignCenter</set>
+          <set>Qt::AlignmentFlag::AlignCenter</set>
          </property>
         </widget>
        </item>
@@ -104,10 +104,61 @@
          </property>
         </widget>
        </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="labelOutlineWidth">
+         <property name="text">
+          <string>Outline Width</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1" colspan="3">
+        <widget class="QLineEdit" name="lineEditOutlineWidth">
+         <property name="toolTip">
+          <string>边框的宽度，单位为像素</string>
+         </property>
+         <property name="text">
+          <string>0</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </item>
     <item row="1" column="0">
+     <widget class="QLabel" name="labelOutlineWidth_2">
+      <property name="text">
+       <string>Auto Tick</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1" colspan="3">
+     <widget class="QLineEdit" name="lineEditAutoTick">
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;默认使用Pathed的Musicfox这一模式下，依赖于Musicfox多次发送同一句歌词时激发歌词tick方法，使得歌词能够滚动；而 Mpris 模式下内部知道当前歌词到下一句歌词之间的间隔时间，并且同一句歌词只发送一次，此时就需要依赖Auto Tick方法让歌词滚动起来，代表隔多少&lt;span style=&quot; font-weight:700;&quot;&gt;毫秒&lt;/span&gt;激发tick方法一次。&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>0</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="labelOutlineWidth_3">
+      <property name="text">
+       <string>Port</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1" colspan="3">
+     <widget class="QLineEdit" name="lineEditPort">
+      <property name="toolTip">
+       <string>接收歌词和指令信息的端口号</string>
+      </property>
+      <property name="text">
+       <string>16501</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
      <widget class="QCheckBox" name="checkBoxStayOnTop">
       <property name="toolTip">
        <string>设定窗口是否置顶，仅发送信号至正在运行中的歌词窗口，不保存配置信息到本地中</string>
@@ -117,7 +168,7 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="1" colspan="2">
+    <item row="3" column="1" colspan="2">
      <widget class="QCheckBox" name="checkBoxFrameLess">
       <property name="toolTip">
        <string>设定窗口是否拥有边框，仅发送信号至正在运行中的歌词窗口，不保存配置信息到本地中</string>
@@ -127,7 +178,7 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="3">
+    <item row="3" column="3">
      <widget class="QCheckBox" name="checkBoxEnableMpris">
       <property name="toolTip">
        <string>启用 Mpris 支持并启用新的歌词控制模式, 启用该项及禁用该项需要重新启动程序</string>
@@ -137,17 +188,7 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="0" colspan="2">
-     <widget class="QPushButton" name="pushButtonPreview">
-      <property name="toolTip">
-       <string>在下方的文本标签内预览字体变化</string>
-      </property>
-      <property name="text">
-       <string>Preview</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="2" colspan="2">
+    <item row="4" column="2" colspan="2">
      <widget class="QPushButton" name="pushButtonApply">
       <property name="toolTip">
        <string>应用配置至配置文件并且启动歌词窗口</string>
@@ -157,7 +198,7 @@
       </property>
      </widget>
     </item>
-    <item row="3" column="0" colspan="2">
+    <item row="5" column="0" colspan="2">
      <widget class="QPushButton" name="pushButtonReload">
       <property name="toolTip">
        <string>保存配置文件，发送重载信号至正在运行中的歌词窗口中</string>
@@ -167,7 +208,7 @@
       </property>
      </widget>
     </item>
-    <item row="3" column="2" colspan="2">
+    <item row="5" column="2" colspan="2">
      <widget class="QPushButton" name="pushButtonSaveSelf">
       <property name="toolTip">
        <string>发送保存位置信息信号至正在运行中的歌词窗口中</string>
@@ -177,7 +218,7 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="0" colspan="4">
+    <item row="6" column="0" colspan="4">
      <widget class="QPlainTextEdit" name="plainTextEditPreviewText">
       <property name="plainText">
        <string>TextLabel
@@ -185,10 +226,20 @@
       </property>
      </widget>
     </item>
-    <item row="5" column="0">
+    <item row="7" column="0" colspan="4">
      <widget class="QLabel" name="labelPreview">
       <property name="text">
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;TextLabel&lt;/p&gt;&lt;p&gt;文本标签&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0" colspan="2">
+     <widget class="QPushButton" name="pushButtonPreview">
+      <property name="toolTip">
+       <string>在下方的文本标签内预览字体变化</string>
+      </property>
+      <property name="text">
+       <string>Preview</string>
       </property>
      </widget>
     </item>

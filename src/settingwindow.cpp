@@ -91,6 +91,15 @@ void SettingWindow::applySettingToForm()
     ui->checkBoxEnableMpris->setChecked(setting.getBool(KEY_ENABLE_MPRIS));
 
     port = setting.has(KEY_RECEIVE_PORT) ? QString::fromStdString(setting.get(KEY_RECEIVE_PORT)).toInt() : PORT;
+    ui->lineEditPort->setText(QString("%1").arg(port));
+    if (setting.has(KEY_LYRIC_AUTO_TICK))
+    {
+        ui->lineEditAutoTick->setText(QString::fromStdString(setting.get(KEY_LYRIC_AUTO_TICK)));
+    }
+    if (setting.has(KEY_FONT_OUTLINE_WIDTH))
+    {
+        ui->lineEditOutlineWidth->setText(QString::fromStdString(setting.get(KEY_FONT_OUTLINE_WIDTH)));
+    }
 }
 
 void SettingWindow::on_pushButtonChooseColor_clicked()
@@ -204,4 +213,19 @@ void SettingWindow::on_pushButtonSaveSelf_clicked()
 void SettingWindow::closeEvent(QCloseEvent* event)
 {
     application->exit(1);
+}
+
+void SettingWindow::on_lineEditOutlineWidth_textChanged(const QString &arg1)
+{
+    setting.put(KEY_FONT_OUTLINE_WIDTH, arg1.toStdString());
+}
+
+void SettingWindow::on_lineEditAutoTick_textChanged(const QString &arg1)
+{
+    setting.put(KEY_LYRIC_AUTO_TICK, arg1.toStdString());
+}
+
+void SettingWindow::on_lineEditPort_textChanged(const QString &arg1)
+{
+    setting.put(KEY_RECEIVE_PORT, arg1.toStdString());
 }
