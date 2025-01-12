@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(lyric-for-musicfox VERSION 0.1 LANGUAGES CXX)
+project(lyric-for-musicfox VERSION 1.3 LANGUAGES CXX)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -119,7 +119,7 @@ endif()
 # If you are developing for iOS or macOS you should consider setting an
 # explicit, fixed bundle identifier manually though.
 if(${QT_VERSION} VERSION_LESS 6.1.0)
-  set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.lyric-for-musicfox)
+    set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.lyric-for-musicfox)
 endif()
 set_target_properties(lyric-for-musicfox PROPERTIES
     ${BUNDLE_ID_OPTION}
@@ -141,7 +141,6 @@ if(QT_VERSION_MAJOR EQUAL 6)
     if(UNIX)
         qt_finalize_executable(mpris-lyric-sender)
     endif()
-    
 endif()
 
 # 生成带有自定端口的补丁
