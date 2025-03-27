@@ -149,7 +149,7 @@ jobs:
         cd ${{ steps.strings.outputs.build-output-dir }} && mingw32-make
       
     - name: Upload lyric-for-musicfox-linux
-      uses: actions/upload-artifact@v3.2.1-node20
+      uses: actions/upload-artifact@v4.6.2
       if: runner.os == 'Linux'
       with:
         # Artifact name
@@ -158,7 +158,7 @@ jobs:
         path: "${{ github.workspace }}/build/lyric-for-musicfox"
 
     - name: Upload mpris-lyric-sender-linux
-      uses: actions/upload-artifact@v3.2.1-node20
+      uses: actions/upload-artifact@v4.6.2
       if: runner.os == 'Linux'
       with:
         # Artifact name
@@ -167,7 +167,7 @@ jobs:
         path: "${{ github.workspace }}/build/mpris-lyric-sender"
         
     - name: Upload lyric-for-musicfox-win
-      uses: actions/upload-artifact@v3.2.1-node20
+      uses: actions/upload-artifact@v4.6.2
       if: runner.os == 'Windows'
       with:
         # Artifact name
@@ -182,7 +182,7 @@ jobs:
         pattern: lyric-for-musicfox*
         
     - name: Upload Patched go-musicfox-linux
-      uses: actions/upload-artifact@v3.2.1-node20
+      uses: actions/upload-artifact@v4.6.2
       if: runner.os == 'Linux'
       with:
         # Artifact name
@@ -191,7 +191,7 @@ jobs:
         path: "${{ github.workspace }}/build/go-musicfox/bin/musicfox" 
         
     - name: Upload Patched go-musicfox-windows
-      uses: actions/upload-artifact@v3.2.1-node20
+      uses: actions/upload-artifact@v4.6.2
       if: runner.os == 'Windows'
       with:
         # Artifact name
