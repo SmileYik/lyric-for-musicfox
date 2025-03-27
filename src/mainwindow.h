@@ -32,6 +32,11 @@ private:
     qint64 index;
     LyricNetworkController* mprisLyricController = nullptr;
 
+#   ifndef LINUX
+    bool stayOnTop = false;
+    QTimer* stayOnTopTimer = new QTimer();
+#   endif
+
 private:
     void closeEvent(QCloseEvent* event) override;
 
@@ -43,5 +48,6 @@ private slots:
     void receiveLyric();
     void reloadSetting();
     void handleCommand(QString command);
+    void handleRefreshStayOnTopFlag();
 };
 #endif // MAINWINDOW_H

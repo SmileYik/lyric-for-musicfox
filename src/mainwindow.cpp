@@ -24,6 +24,8 @@ MainWindow::MainWindow(QApplication* app, QWidget *parent)
 #ifdef LINUX
     setAttribute(Qt::WA_TransparentForMouseEvents);
     setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Tool | Qt::WindowTransparentForInput);
+#else
+    connect(this->stayOnTopTimer, &QTimer::timeout, this, &MainWindow::handleRefreshStayOnTopFlag);
 #endif
 
     connect(this, &MainWindow::needReloadSetting, this, &MainWindow::reloadSetting);
@@ -93,6 +95,17 @@ void MainWindow::reloadSetting()
     setWindowFlag(Qt::FramelessWindowHint, setting.getBool(KEY_FRAME_LESS));
     setWindowFlag(Qt::WindowTransparentForInput, setting.getBool(KEY_FRAME_LESS));
     setAttribute(Qt::WA_TransparentForMouseEvents, setting.getBool(KEY_FRAME_LESS));
+
+#   ifndef LINUX
+    this->stayOnTop = setting.getBool(KEY_FLAGS_STAY_ON_TOP);
+    if (this->stayOnTop)
+    {
+        this->stayOnTopTimer->start(1000);
+    } else
+    {
+        this->stayOnTopTimer->stop();
+    }
+#   endif
 
     // 自动tick
     int autoTick = QString::fromStdString(setting.get(KEY_LYRIC_AUTO_TICK, "0")).toInt();
@@ -187,7 +200,7 @@ void MainWindow::handleCommand(QString command)
     }
     else if (commands[0] == "LYRIC_CONFIG_STAY_ON_TOP" && commands.size() == 2)
     {
-        setWindowFlag(Qt::WindowStaysOnBottomHint, commands[1] == "1");
+        setWindowFlag(Qt::WindowStaysOnTopHint, commands[1] == "1");
         setVisible(true);
         return;
     }
@@ -195,6 +208,16 @@ void MainWindow::handleCommand(QString command)
     {
         this->lyric->enableAutoTick(commands[1].toInt());
     }
+}
+
+void MainWindow::handleRefreshStayOnTopFlag()
+{
+#   ifndef LINUX
+    setWindowFlag(Qt::WindowStaysOnTopHint, !this->stayOnTop);
+    setWindowFlag(Qt::WindowStaysOnTopHint, this->stayOnTop);
+    setWindowFlag(Qt::Tool, true);
+    setVisible(true);
+#   endif
 }
 
 void MainWindow::receiveLyric()
