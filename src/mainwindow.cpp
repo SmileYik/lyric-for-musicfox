@@ -100,7 +100,7 @@ void MainWindow::reloadSetting()
     this->stayOnTop = setting.getBool(KEY_FLAGS_STAY_ON_TOP);
     if (this->stayOnTop)
     {
-        this->stayOnTopTimer->start(1000);
+        this->stayOnTopTimer->start(500);
     } else
     {
         this->stayOnTopTimer->stop();
@@ -213,10 +213,7 @@ void MainWindow::handleCommand(QString command)
 void MainWindow::handleRefreshStayOnTopFlag()
 {
 #   ifndef LINUX
-    setWindowFlag(Qt::WindowStaysOnTopHint, !this->stayOnTop);
-    setWindowFlag(Qt::WindowStaysOnTopHint, this->stayOnTop);
-    setWindowFlag(Qt::Tool, true);
-    setVisible(true);
+    raise();
 #   endif
 }
 
